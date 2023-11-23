@@ -1,0 +1,58 @@
+.card {
+  border-radius: 10px;
+  justify-content: center;
+  width: 100%;
+  padding: 5px;
+}
+
+.main {
+  width: 100%;
+  height: 100%;
+}
+
+video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.content {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: calc(100vw / 3);
+  text-align: center;
+}
+
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  overflow: hidden;
+  line-height: 0;
+}
+
+/* .overlay video {
+  position: relative;
+  display: block;
+  width: calc(132% + 1.3px);
+  height: px;
+} */
+
+/* .overlay .shape-fill {
+  fill: #ffffff;
+} */
+
+.text {
+  font-size: medium;
+  /* font-weight: bold; */
+  background: linear-gradient(to top, #0054b6, #50b8cb);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}

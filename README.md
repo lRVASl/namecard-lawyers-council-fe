@@ -1,2 +1,10 @@
-# namecard-lawyers-council-fe
-namecard-lawyers-council-fe 
+# harmor-frontend
+harmor-frontend
+
+#Install
+
+``` yarn ```
+
+#Start
+
+``` yarn start ```
