@@ -1,7 +1,7 @@
 @import url("https://fonts.cdnfonts.com/css/kanit");
 
 .mainBodypage {
-  background-image: url(../E-Namecard/images/BG_ipad.jpg);
+  background-image: url(../e_namecard/images/E-Namecard.png);
   padding: 25px;
   width: 100%;
   background-position: center;
@@ -37,6 +37,11 @@
   color: #0056b8;
   font-weight: bold;
 }
+.typoHeader-en {
+  font-size: 16px;
+  color: #eb5c2b;
+  font-weight: bold;
+}
 
 .typoDetail {
   font-size: 16px;
@@ -46,24 +51,32 @@
 
 .typodetail-contact {
   text-align: left;
-  color: #606263;
+  color: #2d43a6;
   font-weight: 500;
 }
 
 .cardinContentCard {
   text-align: left;
   font-weight: 150;
-  background-color: #0056b8;
+  background-color: #2D43A6;
 }
 
 .textincardcontent {
   font-weight: 200;
   color: #ffff;
+  font-size: 12px;
 }
 .textincardcontentHead {
   color: #ffff;
-  font-size: 22px;
+  font-size: 14px;
   font-weight: 200;
+  font-weight: bold;
+}
+.textincardcontentHead-red {
+  color: #ff5c01;
+  font-size: 12px;
+  font-weight: 200;
+  font-weight: bold;
 }
 
 .button {

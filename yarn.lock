@@ -2112,6 +2112,13 @@
   dependencies:
     "@iconify/types" "*"
 
+"@iconify/icons-fe@^1.2.5":
+  version "1.2.5"
+  resolved "https://registry.npmjs.org/@iconify/icons-fe/-/icons-fe-1.2.5.tgz"
+  integrity sha512-rSi8V/PEKk5vNbPC1/2QVLCKZn6lB6/HE2mMdWc+DF/x/99d3J8Y7aMMaisMqrolXlCaEy11ezhH7VF9lFqnqQ==
+  dependencies:
+    "@iconify/types" "*"
+
 "@iconify/icons-fluent-mdl2@^1.2.0":
   version "1.2.0"
   resolved "https://registry.npmjs.org/@iconify/icons-fluent-mdl2/-/icons-fluent-mdl2-1.2.0.tgz"

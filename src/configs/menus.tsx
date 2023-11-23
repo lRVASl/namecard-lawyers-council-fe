@@ -1,7 +1,7 @@
 import { pipe, replace, toLower } from "lodash/fp";
 import { Roules } from "../utils/auth";
 import { Route } from "react-router-dom";
-import { MaingenerateQrcode } from "../pages/QRcodepage/maingenerateQrcode";
+import { MaingenerateQrcode } from "../pages/qrcodepage/maingenerateQrcode";
 type MenuConfig = {
   key: string;
   icon?: JSX.Element;

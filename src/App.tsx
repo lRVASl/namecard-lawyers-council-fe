@@ -1,7 +1,7 @@
 import { BrowserRouter, Navigate, Outlet, Route, Routes } from "react-router-dom";
 import { MainLayout } from "./components/MainLayout";
 import { menuItems } from "./configs/menus";
-import { NameCard } from "./pages/E-Namecard/nameCard";
+import { NameCard } from "./pages/e_namecard/nameCard";
 const App = () => {
   // const id24Config = {
   //   refreshTokenIntervalInSeconds: 60,
