@@ -4,9 +4,9 @@ import { useSearchParams } from "react-router-dom";
 
 import { saveAs } from "file-saver";
 // type
-import { IDetailnamecard } from "./common";
+import { IDetailnamecard } from "../common";
 import { axiosInstance } from "../../configs/config";
-import { NamecardService } from "./services/e_name_card.service";
+import { NamecardService } from "../services/e_name_card.service";
 // Icon
 import { Icon } from "@iconify/react";
 import { PhoneFilled, MailFilled } from "@ant-design/icons";

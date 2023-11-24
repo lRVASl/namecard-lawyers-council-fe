@@ -51,55 +51,33 @@ export const MainHeader: React.FC<{}> = () => {
   const ks = pathname.slice(1).split("/");
   return (
     <>
-      <Layout.Header
+      <div
         style={{
-          padding: 5,
-          background: "white",
-          height: "auto",
-          position: "fixed",
-          zIndex: 1000,
-          width: "100%",
-          border: "none",
+          backgroundColor: "white",
+          paddingTop: "10px",
+          paddingBottom: "10px",
+          width: "auto",
         }}
       >
-        <Row
-          style={{
-            justifyContent: "left",
-            display: "flex",
-            padding: "0 30px 0 30px",
-          }}
-        >
-          <Col span={2}>
+        <Row>
+          <Col span={24} style={{ justifyContent: "center", display: "flex" }}>
             <Logo />
           </Col>
-          <Col span={18}>
+          <Col span={24}>
             <Menu
+              mode="inline"
               selectedKeys={ks.slice(-1)}
               defaultOpenKeys={ks.length > 1 ? ks.slice(0, 1) : []}
               items={items}
-              mode="horizontal"
+              inlineIndent={6}
               style={{
-                background: "white",
-                border: "none",
-                color: "black",
-                alignItems: "center",
-                display: "flex",
-                justifyContent: "left",
-                fontSize: "18px",
-                marginTop: "18px",
+                height: "100%",
+                borderRight: 0,
               }}
             />
           </Col>
-          <Col
-            span={4}
-            style={{
-              alignItems: "center",
-              display: "flex",
-              justifyContent: "right",
-            }}
-          ></Col>
         </Row>
-      </Layout.Header>
+      </div>
     </>
   );
 };

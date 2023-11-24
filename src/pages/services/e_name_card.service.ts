@@ -1,4 +1,5 @@
 import { AxiosInstance } from "axios";
+import { IDetailnamecard } from "../common";
 
 export const NamecardService = (axiosInstance: AxiosInstance) => {
   const apiNamecardLawyers = "api/namecard-lawyers";
@@ -23,6 +24,27 @@ export const NamecardService = (axiosInstance: AxiosInstance) => {
     findMemberByID: (id: number) => {
       return axiosInstance
         .post(`${apiNamecardLawyers}/findbyid`, { id: id })
+        .then((result) => result.data)
+        .catch((err) => err.data);
+    },
+
+    createUser: (data: IDetailnamecard) => {
+      return axiosInstance
+        .post(`${apiNamecardLawyers}/create`, data)
+        .then((result) => result.data)
+        .catch((err) => err.data);
+    },
+
+    updateuser: (data: IDetailnamecard) => {
+      return axiosInstance
+        .patch(`${apiNamecardLawyers}/updateuser`, data)
+        .then((result) => result.data)
+        .catch((err) => err.data);
+    },
+
+    deleteUser: (id: number) => {
+      return axiosInstance
+        .delete(`${apiNamecardLawyers}/${id}`)
         .then((result) => result.data)
         .catch((err) => err.data);
     },

@@ -9,7 +9,7 @@ const App = () => {
   // };
   return (
     <>
-      <BrowserRouter basename="/namecard">
+      <BrowserRouter basename="/">
         <Routes>
           <Route path="/" element={<MainLayout />}>
             <Route index element={<Navigate to={menuItems[0].path} replace />} />

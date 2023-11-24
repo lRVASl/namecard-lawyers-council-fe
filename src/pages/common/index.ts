@@ -15,3 +15,8 @@ export interface IDetailnamecard {
   updatedAt: Date | string;
   image: string;
 }
+
+export interface TPagination {
+  current: number;
+  pageSize: number;
+}

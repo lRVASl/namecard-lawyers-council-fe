@@ -2,6 +2,7 @@ import { pipe, replace, toLower } from "lodash/fp";
 import { Roules } from "../utils/auth";
 import { Route } from "react-router-dom";
 import { MaingenerateQrcode } from "../pages/qrcodepage/maingenerateQrcode";
+import { MainCreateUser } from "../pages/createuser/mainCreateUser";
 type MenuConfig = {
   key: string;
   icon?: JSX.Element;
@@ -15,8 +16,18 @@ type MenuConfig = {
 const menuConfigs: MenuConfig[] = [
   {
     key: "1",
-    label: "QR-CODE",
-    path: "qrcode",
+    label: "Create User",
+    path: "createuser",
+    component: (
+      <>
+        <Route index element={<MainCreateUser />} />
+      </>
+    ),
+  },
+  {
+    key: "2",
+    label: "Generate QR-Code",
+    path: "ss",
     component: (
       <>
         <Route index element={<MaingenerateQrcode />} />
@@ -45,6 +56,4 @@ const menuItemMapper = (x: any): MenuItem => {
 
 export const menuItems = menuConfigs.map(menuItemMapper);
 const [firstMenu] = menuItems;
-export const defaultPath = `${firstMenu.path}${
-  firstMenu.children ? `/${firstMenu.children[0].path}` : ""
-}`;
+export const defaultPath = `${firstMenu.path}${firstMenu.children ? `/${firstMenu.children[0].path}` : ""}`;
