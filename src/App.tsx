@@ -2,6 +2,7 @@ import { BrowserRouter, Navigate, Outlet, Route, Routes } from "react-router-dom
 import { MainLayout } from "./components/MainLayout";
 import { menuItems } from "./configs/menus";
 import { NameCard } from "./pages/e_namecard/nameCard";
+import { MainLogin } from "./pages/login/MainLogin";
 const App = () => {
   // const id24Config = {
   //   refreshTokenIntervalInSeconds: 60,
@@ -20,6 +21,7 @@ const App = () => {
             ))}
           </Route>
           <Route path="/idcard" element={<NameCard />} />
+          <Route path="/login" element={<MainLogin />} />
         </Routes>
       </BrowserRouter>
     </>
