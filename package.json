@@ -16,7 +16,7 @@
     "@types/react": "^18.0.14",
     "@types/react-dom": "^18.0.5",
     "@types/vcards-js": "^2.10.2",
-    "antd": "^4.24.0",
+    "antd": "^5.11.4",
     "antd-img-crop": "^4.12.2",
     "axios": "^0.27.2",
     "crypto-js": "^4.1.1",
@@ -105,7 +105,7 @@
     "webpack-cli": "^5.0.1",
     "webpack-dev-server": "^4.13.3"
   },
-  "homepage": "https://econnect.osd.co.th/namecard",
+  "homepage": "https://econnect.osd.co.th",
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",

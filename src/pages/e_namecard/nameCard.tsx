@@ -22,14 +22,37 @@ import "./index.css";
 export const NameCard: React.FC<{}> = (): React.ReactElement => {
   const namecardService = NamecardService(axiosInstance);
   const [searchParams] = useSearchParams();
-  // let userId: string | null = searchParams.get("userId");
+  let userId: string | null = searchParams.get("userId");
   const [data, setData] = useState<IDetailnamecard>();
+  const [getImage, setImage] = useState<any>();
+
   useEffect(() => {
     fectdata();
   }, []);
   const fectdata = async () => {
-    const resEvents = await namecardService.findMemberByID(1);
-    setData(resEvents[0]);
+    const resEvents = await namecardService.findMemberByID(Number(userId));
+
+    if (resEvents) {
+      const data = await Promise.all(
+        resEvents.map(async (event: any) => {
+          const imageData = await dataImages(event);
+          const mapData = {
+            ...event,
+            imagefile: imageData,
+          };
+          return mapData;
+        }),
+      );
+      setData(data[0]);
+    }
+  };
+  const dataImages = async (e: any) => {
+    if (e.images_namecard.length >= 1) {
+      const getImages = await namecardService.getImages(e.images_namecard[0]?.idfile);
+      return getImages;
+    } else {
+      return null;
+    }
   };
 
   const saveContactToVCF = () => {
@@ -71,7 +94,7 @@ END:VCARD`;
           <Card className="cardIncontent" bodyStyle={{ padding: "5px" }}>
             <Avatar
               className="avatar"
-              src={`https://econnect.osd.co.th/namecard/intra/${data?.image}`}
+              src={data ? URL.createObjectURL(data?.imagefile) : ""}
               style={{
                 backgroundPosition: "center",
                 backgroundRepeat: "no-repeat",
@@ -117,23 +140,24 @@ END:VCARD`;
               <Typography className="textincardcontent">{`
 F : +662 522 7138`}</Typography>
             </Card>
-            <Row gutter={[0, 8]} className="divIcon">
-              <Col>
+            {/* <Row gutter={[0, 8]} className="divIcon"> */}
+            <div style={{ justifyContent: "space-around", display: "flex" }}>
+              <div>
                 <Button type="link" onClick={() => handleCall()} className="divIcon">
                   <Icon icon={phoneBold} className="icon" />
                 </Button>
-              </Col>
-              <Col>
+              </div>
+              <div>
                 <Button className="divIcon" type="link" href="https://goo.gl/maps/E4efpJkJA2RmXFXC8" target="_blank">
                   <Icon icon={locationIcon} className="icon" />
                 </Button>
-              </Col>
-              <Col>
+              </div>
+              <div>
                 <Button type="link" className="divIcon" onClick={() => handleSavemail()}>
                   <Icon icon={baselineMail} className="icon" />
                 </Button>
-              </Col>
-              <Col>
+              </div>
+              <div>
                 <Button
                   type="link"
                   onClick={() => handleSaveline()}
@@ -143,13 +167,14 @@ F : +662 522 7138`}</Typography>
                 >
                   <Icon icon={lineAppFill} className="icon" />
                 </Button>
-              </Col>
-              <Col>
+              </div>
+              <div>
                 <Button className="divIcon" type="link" href="https://www.osd.co.th/th/osd-th/" target="_blank">
                   <Icon icon={facebookIcon} className="icon" />
                 </Button>
-              </Col>
-            </Row>
+              </div>
+            </div>
+            {/* </Row> */}
             <Button type="default" className="button" onClick={saveContactToVCF}>
               {`Save Contact`}
             </Button>

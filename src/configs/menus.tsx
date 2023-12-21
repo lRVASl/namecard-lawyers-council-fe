@@ -24,16 +24,16 @@ const menuConfigs: MenuConfig[] = [
       </>
     ),
   },
-  {
-    key: "2",
-    label: "Generate QR-Code",
-    path: "ss",
-    component: (
-      <>
-        <Route index element={<MaingenerateQrcode />} />
-      </>
-    ),
-  },
+  // {
+  //   key: "2",
+  //   label: "Generate QR-Code",
+  //   path: "ss",
+  //   component: (
+  //     <>
+  //       <Route index element={<MaingenerateQrcode />} />
+  //     </>
+  //   ),
+  // },
 ];
 
 export type MenuItem = MenuConfig & {

@@ -1,11 +1,14 @@
-import React, { useState } from "react";
-import { Button, Col, Modal, Row, Table, Typography, message } from "antd";
+import React, { useEffect, useState } from "react";
+import { Button, Col, Modal, Row, Table, Typography, message, Image } from "antd";
 import { ColumnsType, TablePaginationConfig } from "antd/lib/table/interface";
 import { IDetailnamecard, TPagination } from "../../common";
 import { axiosInstance } from "../../../configs/config";
 import { NamecardService } from "../../services/e_name_card.service";
-import { RestOutlined } from "@ant-design/icons";
+import { RestOutlined, CloudDownloadOutlined } from "@ant-design/icons";
+import QRCode from "qrcode.react";
+import html2canvas from "html2canvas";
 import { EditUser } from "./EditUser";
+import { async } from "q";
 
 export interface props {
   dataresult: IDetailnamecard[];
@@ -22,14 +25,16 @@ export const TableUser: React.FC<props> = ({ dataresult, loading, loadings }): R
   const [isModalOpenDel, setIsModalOpenDel] = useState<boolean>(false);
   const [isModalOpenEdit, setIsModalOpenEdit] = useState<boolean>(false);
   const [number, setnumber] = useState<number>(0);
+  const [menberNumber, setMember_number] = useState<string>("");
   const [getdataresult, setdataresult] = useState<IDetailnamecard>();
 
-  const showModalDel = (e: string) => {
+  const showModalDel = (e: string, member_number: string) => {
     setnumber(Number(e));
+    setMember_number(member_number);
     setIsModalOpenDel(true);
   };
   const handleOkDel = async () => {
-    const deleteusers = await namecardService.deleteUser(number);
+    const deleteusers = await namecardService.deleteUser(number, menberNumber);
     if (deleteusers) {
       message.success(`ลบสำเร็จ`);
       setIsModalOpenDel(false);
@@ -44,14 +49,7 @@ export const TableUser: React.FC<props> = ({ dataresult, loading, loadings }): R
     setdataresult(e);
     setIsModalOpenEdit(true);
   };
-  const handleOkEdit = async () => {
-    const deleteusers = await namecardService.deleteUser(number);
-    if (deleteusers) {
-      message.success(`ลบสำเร็จ`);
-      setIsModalOpenEdit(false);
-      loadings(true);
-    }
-  };
+
   const handleCancelEdit = () => {
     setIsModalOpenEdit(false);
   };
@@ -65,6 +63,18 @@ export const TableUser: React.FC<props> = ({ dataresult, loading, loadings }): R
     }));
   }
 
+  const downloadQRCodePNG = async (event: IDetailnamecard) => {
+    const container = await document.getElementById(`qr-gen${event.id}`);
+    if (container) {
+      html2canvas(container).then((canvas) => {
+        const a = document.createElement("a");
+        a.href = canvas.toDataURL("image/png");
+        a.download = `${event.name_en}.png`;
+        a.click();
+      });
+    }
+  };
+
   const columns: ColumnsType<IDetailnamecard> = [
     {
       title: "ลำดับ",
@@ -76,6 +86,20 @@ export const TableUser: React.FC<props> = ({ dataresult, loading, loadings }): R
         return index + skip + 1;
       },
     },
+    {
+      title: "รูปภาพ",
+      dataIndex: "id",
+      key: "id",
+      width: "10%",
+      align: "center",
+      render: (event: string, row: IDetailnamecard, index: number) => {
+        return (
+          <div style={{ justifyContent: "center", display: "flex" }}>
+            <Image src={row.imagefile ? URL.createObjectURL(row.imagefile) : ""} width={100} />
+          </div>
+        );
+      },
+    },
     { title: "ชื่อ (TH)", dataIndex: "name_th", key: "name_th" },
     { title: "สกุล (TH)", dataIndex: "lastname_th", key: "lastname_th" },
     { title: "ชื่อ (EN)", dataIndex: "name_en", key: "name_en" },
@@ -85,6 +109,48 @@ export const TableUser: React.FC<props> = ({ dataresult, loading, loadings }): R
     { title: "อีเมล", dataIndex: "email", key: "email" },
     { title: "Line", dataIndex: "line", key: "line" },
     { title: "Facebook", dataIndex: "facebook", key: "facebook" },
+    {
+      title: "QR-Code",
+      dataIndex: "id",
+      key: "id",
+      fixed: "right",
+      align: "center",
+      render: (event: string, row: IDetailnamecard, index: number) => {
+        return (
+          <>
+            <div style={{ width: "100%", justifyContent: "center", display: "flex" }}>
+              <Row id={`qr-gen${event}`} style={{ width: "150px" }}>
+                <Col span={24} style={{ justifyContent: "center", display: "flex", marginTop: "5px" }}>
+                  <QRCode
+                    key={event}
+                    value={`${window.location.origin}/idcard?userId=${event}`}
+                    bgColor="#FFFFFF"
+                    fgColor="#000000"
+                    level="H"
+                    size={124}
+                  />
+                </Col>
+                <Col span={24} style={{ justifyContent: "center", display: "flex" }}>
+                  <div
+                    style={{ textAlign: "left", marginTop: "5px", fontSize: "12px", marginBottom: "10px" }}
+                  >{`${row.name_th}  ${row.lastname_th}`}</div>
+                </Col>
+              </Row>
+            </div>
+            <div style={{ justifyContent: "center", display: "flex" }}>
+              <Button
+                onClick={() => downloadQRCodePNG(row)}
+                style={{
+                  textAlign: "center",
+                }}
+              >
+                <CloudDownloadOutlined />
+              </Button>
+            </div>
+          </>
+        );
+      },
+    },
     {
       title: "...",
       dataIndex: "id",
@@ -100,7 +166,7 @@ export const TableUser: React.FC<props> = ({ dataresult, loading, loadings }): R
                 <Button type="primary" onClick={() => showModalEdit(row)}>{`แก้ไข`}</Button>
               </Col>
               <Col>
-                <Button type="primary" onClick={() => showModalDel(event)} danger>{`ลบ`}</Button>
+                <Button type="primary" onClick={() => showModalDel(event, String(row?.member_number))} danger>{`ลบ`}</Button>
               </Col>
             </Row>
           </>
@@ -139,7 +205,7 @@ export const TableUser: React.FC<props> = ({ dataresult, loading, loadings }): R
         dataSource={dataresult}
         columns={columns}
         rowKey={(e: IDetailnamecard) => e.id}
-        scroll={{ x: "calc(500px + 100%)" }}
+        scroll={{ x: "calc(700px + 100%)" }}
         onChange={onChange}
       />
     </div>

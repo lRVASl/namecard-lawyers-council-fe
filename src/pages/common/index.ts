@@ -14,6 +14,7 @@ export interface IDetailnamecard {
   createdAt: Date | string;
   updatedAt: Date | string;
   image: string;
+  imagefile: any;
 }
 
 export interface TPagination {

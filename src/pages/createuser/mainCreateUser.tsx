@@ -16,9 +16,30 @@ export const MainCreateUser: React.FC<{}> = ({}): React.ReactElement => {
   }, [loading]);
   const fectdata = async () => {
     const resEvents = await namecardService.findAllMember();
-    setData(resEvents);
+    if (resEvents) {
+      const data = await Promise.all(
+        resEvents.map(async (event: any) => {
+          const imageData = await dataImages(event);
+          const mapData = {
+            ...event,
+            imagefile: imageData,
+          };
+          return mapData;
+        }),
+      );
+      setData(data);
+    }
     setLoading(false);
   };
+  const dataImages = async (e: any) => {
+    if (e.images_namecard.length >= 1) {
+      const getImages = await namecardService.getImages(e.images_namecard[0]?.idfile);
+      return getImages;
+    } else {
+      return null;
+    }
+  };
+
   const showModal = () => {
     setIsModalOpen(true);
   };
@@ -29,7 +50,7 @@ export const MainCreateUser: React.FC<{}> = ({}): React.ReactElement => {
   return !loading ? (
     <div>
       <Modal title="New User" open={isModalOpen} onCancel={handleCancel} footer={false} width={1000}>
-        <CreateUser setIsModalOpen={(e: boolean) => setIsModalOpen(e)} loading={(e: boolean) => setLoading(e)}  />
+        <CreateUser setIsModalOpen={(e: boolean) => setIsModalOpen(e)} loading={(e: boolean) => setLoading(e)} />
       </Modal>
       <Card style={{ width: "100%", justifyContent: "start", display: "flex", alignItems: "end" }}>
         <Typography style={{ fontSize: "32px", fontWeight: "bold" }}>{`Create User`}</Typography>
