@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Avatar, Button, Card, Col, Row, Typography, Image, Space } from "antd";
+import { Avatar, Button, Card, Col, Row, Typography, Image, Space, Result } from "antd";
 import { useSearchParams } from "react-router-dom";
 
 import { saveAs } from "file-saver";
@@ -16,7 +16,7 @@ import baselineMail from "@iconify/icons-ic/baseline-mail";
 import phoneBold from "@iconify/icons-solar/phone-bold";
 import facebookIcon from "@iconify/icons-fe/facebook";
 // logo and css
-import Logo from "./images/Logo_lawyers.png";
+import Logo from "./images/lawyer_card.png";
 import "./index.css";
 
 export const NameCard: React.FC<{}> = (): React.ReactElement => {
@@ -86,9 +86,9 @@ END:VCARD`;
 
   return data ? (
     <>
-      <Row className="mainBodypage" gutter={[8, 14]}>
+      <Row className="mainBodypage" gutter={[8, 8]}>
         <Col span={24} style={{ textAlign: "center" }}>
-          <Image src={Logo} width={150} preview={false} />
+          <Image src={Logo} width={200} preview={false} />
         </Col>
         <Col span={24} style={{ justifyContent: "center", display: "flex", alignItems: "center" }}>
           <Card className="cardIncontent" bodyStyle={{ padding: "5px" }}>
@@ -178,13 +178,15 @@ F : +662 522 7138`}</Typography>
             <Button type="default" className="button" onClick={saveContactToVCF}>
               {`Save Contact`}
             </Button>
-            <p style={{ marginTop: "10px" }}>{`D-Namcard-Lawyers | Version: 1.0.0`}</p>
-            <p style={{ marginTop: "-15px" }}>{`Copyright ©2023 OSD`}</p>
+            <p style={{ marginTop: "10px", fontSize: "12px" }}>{`D-Namcard-Lawyers | Version: 1.0.0`}</p>
+            <p style={{ marginTop: "-1  5px", fontSize: "12px" }}>{`Copyright ©2023 OSD`}</p>
           </Card>
         </Col>
       </Row>
     </>
   ) : (
-    <>{`No Data`}</>
+    <>
+      <Result status="404" title="404" subTitle="No Data UserID Number" />
+    </>
   );
 };

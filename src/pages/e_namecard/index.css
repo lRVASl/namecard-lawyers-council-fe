@@ -2,7 +2,7 @@
 
 .mainBodypage {
   background-image: url(../e_namecard/images/E-Namecard.png);
-  padding: 25px;
+  padding: 25px 7px 25px 10px;
   width: 100%;
   background-position: center;
   background-repeat: no-repeat;
@@ -21,7 +21,7 @@
   display: flex;
   width: 100%;
   box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
-  padding: 10px;
+  padding: 5px;
   text-align: center;
 }
 
@@ -58,7 +58,7 @@
 .cardinContentCard {
   text-align: left;
   font-weight: 150;
-  background-color: #2D43A6;
+  background-color: #2d43a6;
 }
 
 .textincardcontent {
