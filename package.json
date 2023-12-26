@@ -105,14 +105,14 @@
     "webpack-cli": "^5.0.1",
     "webpack-dev-server": "^4.13.3"
   },
-  "homepage": "https://econnect.osd.co.th",
+  "homepage": "https://lawyer-card.lawyercouncil.or.th",
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "prepare": "husky install",
-    "docker:buildx": "docker build --no-cache --platform linux/amd64 -t 'e-namecard-fe:v1.0.53' -f Dockerfile ."
+    "docker:buildx": "docker build --no-cache --platform linux/amd64 -t 'namecard-lawyers-fe:v1.0.3' -f Dockerfile ."
   },
   "eslintConfig": {
     "extends": [

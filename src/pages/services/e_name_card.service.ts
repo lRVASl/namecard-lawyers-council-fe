@@ -2,17 +2,17 @@ import { AxiosInstance } from "axios";
 import { IDetailnamecard } from "../common";
 
 export const NamecardService = (axiosInstance: AxiosInstance) => {
-  const apiNamecardLawyers = "api/namecard-lawyers";
+  const apiNamecardLawyers = "/namecard-lawyers";
   return {
-    namecard: async () => {
-      return await axiosInstance
-        .get(`http://18.139.111.131/intra/api/user.php?userId=suradachk`, {
-          headers: {
-            Authorization: "Bearer osdadminapisuperkey",
-          },
-        })
-        .then((result) => result);
-    },
+    // namecard: async () => {
+    //   return await axiosInstance
+    //     .get(`http://18.139.111.131/intra/api/user.php?userId=suradachk`, {
+    //       headers: {
+    //         Authorization: "Bearer osdadminapisuperkey",
+    //       },
+    //     })
+    //     .then((result) => result);
+    // },
 
     findAllMember: () => {
       return axiosInstance
