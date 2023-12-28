@@ -112,7 +112,7 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "prepare": "husky install",
-    "docker:buildx": "docker build --no-cache --platform linux/amd64 -t 'namecard-lawyers-fe:v1.0.3' -f Dockerfile ."
+    "docker:buildx": "docker build --no-cache --platform linux/amd64 -t 'namecard-lawyers-fe:v1.0.4' -f Dockerfile ."
   },
   "eslintConfig": {
     "extends": [

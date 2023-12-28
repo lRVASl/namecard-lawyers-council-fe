@@ -31,19 +31,19 @@ export const NameCard: React.FC<{}> = (): React.ReactElement => {
   }, []);
   const fectdata = async () => {
     const resEvents = await namecardService.findMemberByID(Number(userId));
-
     if (resEvents) {
-      const data = await Promise.all(
-        resEvents.map(async (event: any) => {
-          const imageData = await dataImages(event);
-          const mapData = {
-            ...event,
-            imagefile: imageData,
-          };
-          return mapData;
-        }),
-      );
-      setData(data[0]);
+      // const data = await Promise.all(
+      //   resEvents.map(async (event: any) => {
+      //     const imageData = await dataImages(event);
+      //     const mapData = {
+      //       ...event,
+      //       imagefile: imageData,
+      //     };
+      //     return mapData;
+      //   }),
+      // );
+      const getImages = await namecardService.getImages(resEvents[0].images_namecard[0]?.idfile);
+      setData({ ...resEvents[0], imagefile: getImages });
     }
   };
   const dataImages = async (e: any) => {
