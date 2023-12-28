@@ -1,18 +1,17 @@
-import { Col, Layout, Menu } from "antd";
+import { Col, Layout, Menu, Row } from "antd";
+import React from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useMemo } from "react";
 import { intersection } from "lodash";
 import { menuItems, MenuItem } from "../../configs/menus";
-import { useAuth } from "../../utils/auth";
 import { Logo } from "./Logo";
-import styles from "./MainLayout.module.scss";
 import { useId24 } from "../../drivers/id24/Id24Provider";
 
-export const MainMenu = () => {
+export const MainMenu: React.FC<{}> = () => {
   const navigate = useNavigate();
   const { pathname } = useLocation();
-  const { tokenAccess, login, logout, id24Axios } = useId24();
   const auth = useId24();
+
   const groupRoules: string[] = [];
   if (auth) {
     auth.tokenAccess?.userAccess.map((groupId) => {
@@ -25,8 +24,7 @@ export const MainMenu = () => {
     return array.indexOf(val) == id;
   });
   const items = useMemo(() => {
-    const rolePredicate = (x: MenuItem) =>
-      x.roles ? intersection(uniqueNames, x.roles).length : true;
+    const rolePredicate = (x: MenuItem) => (x.roles ? intersection(uniqueNames, x.roles).length : true);
 
     const itemMapper = (x: MenuItem): MenuItem & { onClick: () => void } => {
       return {
@@ -48,11 +46,9 @@ export const MainMenu = () => {
       };
     };
     return menuItems.filter(rolePredicate).map(itemMapper);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [uniqueNames]);
 
   const ks = pathname.slice(1).split("/");
-
   return (
     <>
       <div
@@ -63,20 +59,25 @@ export const MainMenu = () => {
           width: "auto",
         }}
       >
-        <Logo />
+        <Row>
+          <Col span={24} style={{ justifyContent: "center", display: "flex" }}>
+            <Logo />
+          </Col>
+          <Col span={24}>
+            <Menu
+              mode="inline"
+              selectedKeys={ks.slice(-1)}
+              defaultOpenKeys={ks.length > 1 ? ks.slice(0, 1) : []}
+              items={items}
+              inlineIndent={6}
+              style={{
+                height: "100%",
+                borderRight: 0,
+              }}
+            />
+          </Col>
+        </Row>
       </div>
-      <Menu
-        theme="light"
-        mode="inline"
-        selectedKeys={ks.slice(-1)}
-        defaultOpenKeys={ks.length > 1 ? ks.slice(0, 1) : []}
-        items={items}
-        inlineIndent={6}
-        style={{
-          height: "100%",
-          borderRight: 0,
-        }}
-      />
     </>
   );
 };

@@ -1,7 +1,6 @@
 import { pipe, replace, toLower } from "lodash/fp";
 import { Roules } from "../utils/auth";
 import { Route } from "react-router-dom";
-import { MaingenerateQrcode } from "../pages/qrcodepage/maingenerateQrcode";
 import { MainCreateUser } from "../pages/createuser/mainCreateUser";
 type MenuConfig = {
   key: string;
@@ -24,16 +23,6 @@ const menuConfigs: MenuConfig[] = [
       </>
     ),
   },
-  // {
-  //   key: "2",
-  //   label: "Generate QR-Code",
-  //   path: "ss",
-  //   component: (
-  //     <>
-  //       <Route index element={<MaingenerateQrcode />} />
-  //     </>
-  //   ),
-  // },
 ];
 
 export type MenuItem = MenuConfig & {

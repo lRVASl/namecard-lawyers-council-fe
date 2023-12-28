@@ -1,6 +1,6 @@
-import React from "react";
-import { Layout } from "antd";
-import { MainHeader } from "./MainHeader";
+import React, { useState } from "react";
+import { Button, Layout, Result } from "antd";
+import { MainMenu } from "./MainManu";
 import { Outlet } from "react-router-dom";
 import { useId24 } from "../../drivers/id24/Id24Provider";
 import { MainFooter } from "./MainFooter";
@@ -8,6 +8,9 @@ import { Header } from "antd/lib/layout/layout";
 
 const { Content, Footer, Sider } = Layout;
 export const MainLayout: React.FC = () => {
+  const { authenticated, login, logout, id24Axios } = useId24();
+  const challengeKey = "challenge";
+  const challenge = localStorage.getItem(challengeKey);
   const auth = useId24();
   const groupRoules: string[] = [];
   if (auth) {
@@ -17,7 +20,18 @@ export const MainLayout: React.FC = () => {
       });
     });
   }
-  return (
+  return !authenticated || !challenge ? (
+    <Result
+      status="403"
+      title="403"
+      subTitle="ท่านยังไม่มีสิทธิ์ในการเข้าถึงระบบ กรุณาตรวจสอบสิทธิ์ในการเข้าถึงกับผู้ดูแลระบบ."
+      extra={
+        <Button type="primary" onClick={() => logout().then(() => login(window.location.href, false))}>
+          Click to Login
+        </Button>
+      }
+    />
+  ) : (
     <>
       <Layout hasSider>
         <Sider
@@ -34,7 +48,7 @@ export const MainLayout: React.FC = () => {
             bottom: 0,
           }}
         >
-          <MainHeader />
+          <MainMenu />
         </Sider>
         <Layout className="site-layout" style={{ paddingLeft: 200 }}>
           <Header
