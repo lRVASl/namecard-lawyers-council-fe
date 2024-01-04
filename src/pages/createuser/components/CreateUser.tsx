@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button, Col, Form, Input, Modal, Row, message } from "antd";
+import { Button, Col, Form, Input, Modal, Row, Space, message } from "antd";
 import { ExclamationCircleOutlined, PlusOutlined } from "@ant-design/icons";
 import { NamecardService } from "../../services/e_name_card.service";
 import { axiosInstance } from "../../../configs/config";
@@ -32,19 +32,30 @@ export const CreateUser: React.FC<props> = ({ setIsModalOpen, loading }): React.
     return await setFileList(newFileList);
   };
 
-  const handleCancel = () => setPreviewOpen(false);
+  const handleCancel = () => {
+    setPreviewOpen(false);
+    setIsModalOpen(false);
+    FORM.resetFields();
+  };
+
+  const validatePhone = (number: string) => {
+    if (!number) {
+      return true;
+    }
+    return /^[0-9]{1,10}$/.test(number);
+  };
 
   const uploadButton = (
     <div>
       <PlusOutlined />
-      <div style={{ marginTop: 8 }}>{`Upload`}</div>
+      <div style={{ marginTop: 8 }}>{`อัพโหลด`}</div>
     </div>
   );
 
   const onfinish = async (event: IDetailnamecard) => {
+    console.log(fileList.length);
+
     const uuidNumber: string = uuidv4();
-    const formData: any = new FormData();
-    formData.append("images", fileList[0].originFileObj);
     const body = {
       data: {
         ...event,
@@ -52,15 +63,19 @@ export const CreateUser: React.FC<props> = ({ setIsModalOpen, loading }): React.
       },
     };
     Modal.confirm({
-      title: "ต้องการสร้าง User ใหม่ใช่หรือไม่ ?",
+      title: "คุณต้องการสร้างผู้ใช้งานใหม่ใช่หรือไม่ ?",
       icon: <ExclamationCircleOutlined />,
-      content: "กดยืนยันเพื่อสร้าง User",
+      content: "กดยืนยันเพื่อสร้างผู้ใช้งานใหม่",
       okText: "ยืนยัน",
       cancelText: "ยกเลิก",
       onOk: async () => {
         const createusers = await namecardService.createUser(body as any);
         if (createusers) {
-          const images = await namecardService.uploadNewImages(uuidNumber, formData);
+          if (fileList.length > 0) {
+            const formData: any = new FormData();
+            formData.append("images", fileList[0].originFileObj);
+            const images = await namecardService.uploadNewImages(uuidNumber, formData);
+          }
           message.success(`สร้างผู้ใช้งานใหม่สำเร็จ`);
           setIsModalOpen(false);
           loading(true);
@@ -105,22 +120,22 @@ export const CreateUser: React.FC<props> = ({ setIsModalOpen, loading }): React.
             </ImgCrop>
           </Col>
           <Col span={12}>
-            <Form.Item name={"name_th"} label={`ชื่อ (TH)`}>
+            <Form.Item name={"name_th"} label={`ชื่อ (ไทย)`}>
               <Input placeholder="Text" />
             </Form.Item>
           </Col>
           <Col span={12}>
-            <Form.Item name={"lastname_th"} label={`นามสกุล (TH)`}>
+            <Form.Item name={"lastname_th"} label={`นามสกุล (ไทย)`}>
               <Input placeholder="Text" />
             </Form.Item>
           </Col>
           <Col span={12}>
-            <Form.Item name={"name_en"} label={`ชื่อ (EN)`}>
+            <Form.Item name={"name_en"} label={`ชื่อ (อังกฤษ)`}>
               <Input placeholder="Text" />
             </Form.Item>
           </Col>
           <Col span={12}>
-            <Form.Item name={"lastname_en"} label={`นามสกุล (EN)`}>
+            <Form.Item name={"lastname_en"} label={`นามสกุล (อังกฤษ)`}>
               <Input placeholder="Text" />
             </Form.Item>
           </Col>
@@ -130,17 +145,41 @@ export const CreateUser: React.FC<props> = ({ setIsModalOpen, loading }): React.
             </Form.Item>
           </Col>
           <Col span={12}>
-            <Form.Item name={"phone_number"} label={`เบอร์โทรศัพท์`}>
+            <Form.Item
+              name={"phone_number"}
+              label={`เบอร์โทรศัพท์`}
+              rules={[
+                {
+                  required: false,
+                  validator: async (_, storeValue) => {
+                    if (validatePhone(storeValue)) {
+                      return Promise.resolve(storeValue);
+                    }
+                    return Promise.reject(new Error("Please Input Phone Number"));
+                  },
+                },
+              ]}
+            >
+              <Input placeholder="Text" maxLength={10} />
+            </Form.Item>
+          </Col>
+          <Col span={12}>
+            <Form.Item
+              name={"email"}
+              label={`อีเมล`}
+              rules={[
+                {
+                  required: false,
+                  type: "email",
+                  message: "Please input Email or is not valid E-mail!",
+                },
+              ]}
+            >
               <Input placeholder="Text" />
             </Form.Item>
           </Col>
           <Col span={12}>
-            <Form.Item name={"email"} label={`อีเมล`}>
-              <Input placeholder="Text" />
-            </Form.Item>
-          </Col>
-          <Col span={12}>
-            <Form.Item name={"line"} label={`Line`}>
+            <Form.Item name={"line"} label={`Line ID`}>
               <Input placeholder="Text" />
             </Form.Item>
           </Col>
@@ -150,9 +189,14 @@ export const CreateUser: React.FC<props> = ({ setIsModalOpen, loading }): React.
             </Form.Item>
           </Col>
           <Col span={24} style={{ justifyContent: "center", display: "flex" }}>
-            <Form.Item>
-              <Button type="primary" htmlType="submit">{`ยืนยัน`}</Button>
-            </Form.Item>
+            <Space>
+              <Form.Item>
+                <Button type="primary" danger onClick={() => handleCancel()}>{`ยกเลิก`}</Button>
+              </Form.Item>
+              <Form.Item>
+                <Button type="primary" htmlType="submit">{`ยืนยัน`}</Button>
+              </Form.Item>
+            </Space>
           </Col>
         </Row>
       </Form>

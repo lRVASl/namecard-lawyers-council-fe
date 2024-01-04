@@ -115,11 +115,12 @@ export const TableUser: React.FC<props> = ({ dataresult, loading, loadings }): R
       key: "id",
       fixed: "right",
       align: "center",
+      width: "15%",
       render: (event: string, row: IDetailnamecard, index: number) => {
         return (
           <>
             <div style={{ width: "100%", justifyContent: "center", display: "flex" }}>
-              <Row id={`qr-gen${event}`} style={{ width: "150px" }}>
+              <Row id={`qr-gen${event}`} style={{ width: "250px" }}>
                 <Col span={24} style={{ justifyContent: "center", display: "flex", marginTop: "5px" }}>
                   <QRCode
                     key={event}
@@ -130,10 +131,10 @@ export const TableUser: React.FC<props> = ({ dataresult, loading, loadings }): R
                     size={124}
                   />
                 </Col>
-                <Col span={24} style={{ justifyContent: "center", display: "flex" }}>
+                <Col span={24} style={{ textAlign:'center',justifyContent: "center", display: "flex",padding:"0px 20px 0px 20px" }}>
                   <div
-                    style={{ textAlign: "left", marginTop: "5px", fontSize: "12px", marginBottom: "10px" }}
-                  >{`${row.name_th}  ${row.lastname_th}`}</div>
+                    style={{  marginTop: "5px", fontSize: "12px", marginBottom: "10px"}}
+                  >{`${row.name_th} ${row.lastname_th}`}</div>
                 </Col>
               </Row>
             </div>
@@ -152,7 +153,7 @@ export const TableUser: React.FC<props> = ({ dataresult, loading, loadings }): R
       },
     },
     {
-      title: "...",
+      title: "Action",
       dataIndex: "id",
       key: "id",
       fixed: "right",
@@ -184,7 +185,7 @@ export const TableUser: React.FC<props> = ({ dataresult, loading, loadings }): R
             <RestOutlined style={{ fontSize: "72px", color: "red" }} />
           </Col>
           <Col span={24} style={{ width: "100%", justifyContent: "center", display: "flex" }}>
-            <Typography>{`ยืนยันที่จะลบข้อมูลผู้ใช้งานท่านนี้ใช่ไหม ?`}</Typography>
+            <Typography>{`คุณต้องการยืนยันการลบข้อมูลผู้ใช้งานนี้ใช่หรือไม่ ?`}</Typography>
           </Col>
 
           <Col>

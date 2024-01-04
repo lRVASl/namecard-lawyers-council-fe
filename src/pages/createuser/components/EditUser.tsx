@@ -32,6 +32,12 @@ export const EditUser: React.FC<props> = ({ setIsModalOpenEdit, loadings, getdat
   FORM.setFieldValue(`line`, getdataresult?.line);
   FORM.setFieldValue(`facebook`, getdataresult?.facebook);
 
+  const handleCancel = () => {
+    setPreviewOpen(false);
+    setIsModalOpenEdit(false);
+    FORM.resetFields();
+  };
+
   const onfinish = (event: IDetailnamecard) => {
     const body = {
       condition: {
@@ -44,9 +50,9 @@ export const EditUser: React.FC<props> = ({ setIsModalOpenEdit, loadings, getdat
       },
     };
     Modal.confirm({
-      title: "ต้องการแก้ไขข้อมูล User ใช่หรือไม่ ?",
+      title: "คุณต้องการแก้ไขข้อมูลผู้ใช้งานใช่หรือไม่ ?",
       icon: <ExclamationCircleOutlined />,
-      content: "กดยืนยันเพื่อแก้ไขข้อมูล User",
+      content: "กดยืนยันเพื่อแก้ไขข้อมูลผู้ใช้งาน",
       okText: "ยืนยัน",
       cancelText: "ยกเลิก",
       onOk: async () => {
@@ -72,10 +78,17 @@ export const EditUser: React.FC<props> = ({ setIsModalOpenEdit, loadings, getdat
       },
     });
   };
+
+  const validatePhone = (number: string) => {
+    if (!number) {
+      return true;
+    }
+    return /^[0-9]{1,10}$/.test(number);
+  };
   const uploadButton = (
     <div>
       <PlusOutlined />
-      <div style={{ marginTop: 8 }}>{`Upload`}</div>
+      <div style={{ marginTop: 8 }}>{`อัพโหลด`}</div>
     </div>
   );
   const handlePreview = async (file: UploadFile) => {
@@ -103,7 +116,7 @@ export const EditUser: React.FC<props> = ({ setIsModalOpenEdit, loadings, getdat
       <Form name="createuser" form={FORM} layout="vertical" onFinish={onfinish}>
         <Row gutter={[8, 8]}>
           <Col span={24}>
-            <Form.Item label={`Image :`}>
+            <Form.Item label={`รูปภาพ :`}>
               <Row gutter={[8, 8]} style={{ justifyContent: "center", display: "flex" }}>
                 <Space>
                   {getImage === null ? (
@@ -132,22 +145,22 @@ export const EditUser: React.FC<props> = ({ setIsModalOpenEdit, loadings, getdat
             </Form.Item>
           </Col>
           <Col span={12}>
-            <Form.Item name={"name_th"} label={`ชื่อ (TH)`}>
+            <Form.Item name={"name_th"} label={`ชื่อ (ไทย)`}>
               <Input placeholder="Text" />
             </Form.Item>
           </Col>
           <Col span={12}>
-            <Form.Item name={"lastname_th"} label={`นามสกุล (TH)`}>
+            <Form.Item name={"lastname_th"} label={`นามสกุล (ไทย)`}>
               <Input placeholder="Text" />
             </Form.Item>
           </Col>
           <Col span={12}>
-            <Form.Item name={"name_en"} label={`ชื่อ (EN)`}>
+            <Form.Item name={"name_en"} label={`ชื่อ (อังกฤษ)`}>
               <Input placeholder="Text" />
             </Form.Item>
           </Col>
           <Col span={12}>
-            <Form.Item name={"lastname_en"} label={`นามสกุล (EN)`}>
+            <Form.Item name={"lastname_en"} label={`นามสกุล (อังกฤษ)`}>
               <Input placeholder="Text" />
             </Form.Item>
           </Col>
@@ -157,12 +170,36 @@ export const EditUser: React.FC<props> = ({ setIsModalOpenEdit, loadings, getdat
             </Form.Item>
           </Col>
           <Col span={12}>
-            <Form.Item name={"phone_number"} label={`เบอร์โทรศัพท์`}>
-              <Input placeholder="Text" />
+            <Form.Item
+              name={"phone_number"}
+              label={`เบอร์โทรศัพท์`}
+              rules={[
+                {
+                  required: false,
+                  validator: async (_, storeValue) => {
+                    if (validatePhone(storeValue)) {
+                      return Promise.resolve(storeValue);
+                    }
+                    return Promise.reject(new Error("Please Input Phone Number"));
+                  },
+                },
+              ]}
+            >
+              <Input placeholder="Text" maxLength={10} />
             </Form.Item>
           </Col>
           <Col span={12}>
-            <Form.Item name={"email"} label={`อีเมล`}>
+            <Form.Item
+              name={"email"}
+              label={`อีเมล`}
+              rules={[
+                {
+                  required: false,
+                  type: "email",
+                  message: "Please input Email or is not valid E-mail!",
+                },
+              ]}
+            >
               <Input placeholder="Text" />
             </Form.Item>
           </Col>
@@ -177,9 +214,14 @@ export const EditUser: React.FC<props> = ({ setIsModalOpenEdit, loadings, getdat
             </Form.Item>
           </Col>
           <Col span={24} style={{ justifyContent: "center", display: "flex" }}>
-            <Form.Item>
-              <Button type="primary" htmlType="submit">{`ยืนยัน`}</Button>
-            </Form.Item>
+            <Space>
+              <Form.Item>
+                <Button type="primary" danger onClick={() => handleCancel()}>{`ยกเลิก`}</Button>
+              </Form.Item>
+              <Form.Item>
+                <Button type="primary" htmlType="submit">{`ยืนยัน`}</Button>
+              </Form.Item>
+            </Space>
           </Col>
         </Row>
       </Form>

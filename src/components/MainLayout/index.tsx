@@ -8,30 +8,33 @@ import { Header } from "antd/lib/layout/layout";
 
 const { Content, Footer, Sider } = Layout;
 export const MainLayout: React.FC = () => {
-  const { authenticated, login, logout, id24Axios } = useId24();
-  const challengeKey = "challenge";
-  const challenge = localStorage.getItem(challengeKey);
-  const auth = useId24();
-  const groupRoules: string[] = [];
-  if (auth) {
-    auth.tokenAccess?.userAccess.map((groupId) => {
-      groupId.roles.forEach(function (value, i) {
-        groupRoules.push(value);
-      });
-    });
-  }
-  return !authenticated || !challenge ? (
-    <Result
-      status="403"
-      title="403"
-      subTitle="ท่านยังไม่มีสิทธิ์ในการเข้าถึงระบบ กรุณาตรวจสอบสิทธิ์ในการเข้าถึงกับผู้ดูแลระบบ."
-      extra={
-        <Button type="primary" onClick={() => logout().then(() => login(window.location.href, false))}>
-          Click to Login
-        </Button>
-      }
-    />
-  ) : (
+  // const auth = useId24();
+  // const groupRoules: string[] = [];
+  // if (auth) {
+  //   auth.tokenAccess?.userAccess.map((groupId) => {
+  //     groupId.roles.forEach(function (value, i) {
+  //       groupRoules.push(value);
+  //     });
+  //   });
+  // }
+
+  // const { authenticated, login, logout, id24Axios } = useId24();
+  // const challengeKey = "challenge";
+  // const challenge = localStorage.getItem(challengeKey);
+  // return !authenticated || !challenge ? (
+  //   <>{login(window.location.href, false)}</>
+  // ) :
+  // <Result
+  //   status="403"
+  //   title="403"
+  //   subTitle="ท่านยังไม่มีสิทธิ์ในการเข้าถึงระบบ กรุณาตรวจสอบสิทธิ์ในการเข้าถึงกับผู้ดูแลระบบ."
+  //   extra={
+  //     <Button type="primary" onClick={() => logout().then(() => login(window.location.href, false))}>
+  //       Click to Login
+  //     </Button>
+  //   }
+  // />
+  return (
     <>
       <Layout hasSider>
         <Sider
