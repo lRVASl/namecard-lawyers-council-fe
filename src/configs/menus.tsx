@@ -15,7 +15,7 @@ type MenuConfig = {
 const menuConfigs: MenuConfig[] = [
   {
     key: "1",
-    label: "Create User",
+    label: "สร้างผู้ใช้งาน",
     path: "createuser",
     component: (
       <>

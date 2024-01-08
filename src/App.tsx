@@ -13,24 +13,23 @@ const App = () => {
   return (
     <>
       <BrowserRouter basename="/">
-        {/* <Id24Provider config={id24Config}>
-          <AuthProvider> */}
-        <Routes>
-          <Route path="/" element={<MainLayout />}>
-            <Route index element={<Navigate to={menuItems[0].path} replace />} />
-            {menuItems.map((x) => (
-              <Route key={x.key} path={x.path} element={<Outlet />}>
-                {x.component}
+        <Id24Provider config={id24Config}>
+          <AuthProvider>
+            <Routes>
+              <Route path="/" element={<MainLayout />}>
+                <Route index element={<Navigate to={menuItems[0].path} replace />} />
+                {menuItems.map((x) => (
+                  <Route key={x.key} path={x.path} element={<Outlet />}>
+                    {x.component}
+                  </Route>
+                ))}
               </Route>
-            ))}
-          </Route>
-          <Route path="/idcard" element={<NameCard />} />
-        </Routes>
-        {/* </AuthProvider>
-        </Id24Provider> */}
+              <Route path="/idcard" element={<NameCard />} />
+            </Routes>
+          </AuthProvider>
+        </Id24Provider>
       </BrowserRouter>
     </>
   );
 };
-
 export default App;

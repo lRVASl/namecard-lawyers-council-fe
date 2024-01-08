@@ -53,8 +53,20 @@ export const CreateUser: React.FC<props> = ({ setIsModalOpen, loading }): React.
   );
 
   const onfinish = async (event: IDetailnamecard) => {
-    console.log(fileList.length);
-
+    if (
+      (event.name_th === undefined || event.name_th === null) &&
+      (event.lastname_th === null || event.lastname_th === undefined) &&
+      (event.name_en === null || event.name_en === undefined) &&
+      (event.lastname_en === null || event.lastname_en === undefined) &&
+      (event.position === null || event.position === undefined) &&
+      (event.phone_number === null || event.phone_number === undefined) &&
+      (event.line === null || event.line === undefined) &&
+      (event.facebook === null || event.facebook === undefined) &&
+      fileList.length === 0
+    ) {
+      message.error("กรุณากรอกข้อมูลอย่งาน้อย 1 ข้อมูล");
+      return;
+    }
     const uuidNumber: string = uuidv4();
     const body = {
       data: {
@@ -155,7 +167,7 @@ export const CreateUser: React.FC<props> = ({ setIsModalOpen, loading }): React.
                     if (validatePhone(storeValue)) {
                       return Promise.resolve(storeValue);
                     }
-                    return Promise.reject(new Error("Please Input Phone Number"));
+                    return Promise.reject(new Error("กรุณากรอกเบอร์โทรศัพท์"));
                   },
                 },
               ]}
@@ -171,7 +183,7 @@ export const CreateUser: React.FC<props> = ({ setIsModalOpen, loading }): React.
                 {
                   required: false,
                   type: "email",
-                  message: "Please input Email or is not valid E-mail!",
+                  message: "กรุณากรอกอีเมลให้ถูกต้อง!",
                 },
               ]}
             >

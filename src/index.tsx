@@ -58,16 +58,15 @@ const app = async () => {
       reloadPage,
     };
     root.render(
-      // <Id24InstanceProvider instance={id24Instance} authenticationHelper={authenticationHelper}>
-      <ConfigProvider locale={thTH}>
-        <App />
-      </ConfigProvider>,
-      // </Id24InstanceProvider>,
+      <Id24InstanceProvider instance={id24Instance} authenticationHelper={authenticationHelper}>
+        <ConfigProvider locale={thTH}>
+          <App />
+        </ConfigProvider>
+      </Id24InstanceProvider>,
     );
     reportWebVitals();
   } catch (e) {
     console.log(e);
   }
 };
-
 app();

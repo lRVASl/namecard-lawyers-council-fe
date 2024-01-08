@@ -100,14 +100,14 @@ export const TableUser: React.FC<props> = ({ dataresult, loading, loadings }): R
         );
       },
     },
-    { title: "ชื่อ (TH)", dataIndex: "name_th", key: "name_th" },
-    { title: "สกุล (TH)", dataIndex: "lastname_th", key: "lastname_th" },
-    { title: "ชื่อ (EN)", dataIndex: "name_en", key: "name_en" },
-    { title: "สกุล (EN)", dataIndex: "lastname_en", key: "lastname_en" },
+    { title: "ชื่อ (ไทย)", dataIndex: "name_th", key: "name_th" },
+    { title: "สกุล (ไทย)", dataIndex: "lastname_th", key: "lastname_th" },
+    { title: "ชื่อ (อังกฤษ)", dataIndex: "name_en", key: "name_en" },
+    { title: "สกุล (อังกฤษ)", dataIndex: "lastname_en", key: "lastname_en" },
     { title: "ตำแหน่ง", dataIndex: "position", key: "position" },
     { title: "เบอร์โทรศัพท์", dataIndex: "phone_number", key: "phone_number" },
     { title: "อีเมล", dataIndex: "email", key: "email" },
-    { title: "Line", dataIndex: "line", key: "line" },
+    { title: "Line ID", dataIndex: "line", key: "line" },
     { title: "Facebook", dataIndex: "facebook", key: "facebook" },
     {
       title: "QR-Code",
@@ -131,10 +131,8 @@ export const TableUser: React.FC<props> = ({ dataresult, loading, loadings }): R
                     size={124}
                   />
                 </Col>
-                <Col span={24} style={{ textAlign:'center',justifyContent: "center", display: "flex",padding:"0px 20px 0px 20px" }}>
-                  <div
-                    style={{  marginTop: "5px", fontSize: "12px", marginBottom: "10px"}}
-                  >{`${row.name_th} ${row.lastname_th}`}</div>
+                <Col span={24} style={{ textAlign: "center", justifyContent: "center", display: "flex", padding: "0px 20px 0px 20px" }}>
+                  <div style={{ marginTop: "5px", fontSize: "12px", marginBottom: "10px" }}>{`${row.name_th} ${row.lastname_th}`}</div>
                 </Col>
               </Row>
             </div>

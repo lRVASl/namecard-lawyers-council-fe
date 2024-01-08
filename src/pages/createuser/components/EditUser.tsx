@@ -39,6 +39,20 @@ export const EditUser: React.FC<props> = ({ setIsModalOpenEdit, loadings, getdat
   };
 
   const onfinish = (event: IDetailnamecard) => {
+    if (
+      (event.name_th === undefined || event.name_th === null) &&
+      (event.lastname_th === null || event.lastname_th === undefined) &&
+      (event.name_en === null || event.name_en === undefined) &&
+      (event.lastname_en === null || event.lastname_en === undefined) &&
+      (event.position === null || event.position === undefined) &&
+      (event.phone_number === null || event.phone_number === undefined) &&
+      (event.line === null || event.line === undefined) &&
+      (event.facebook === null || event.facebook === undefined) &&
+      fileList.length === 0
+    ) {
+      message.error("กรุณากรอกข้อมูลอย่งาน้อย 1 ข้อมูล");
+      return;
+    }
     const body = {
       condition: {
         where: {
@@ -180,7 +194,7 @@ export const EditUser: React.FC<props> = ({ setIsModalOpenEdit, loadings, getdat
                     if (validatePhone(storeValue)) {
                       return Promise.resolve(storeValue);
                     }
-                    return Promise.reject(new Error("Please Input Phone Number"));
+                    return Promise.reject(new Error("กรุณากรอกเบอร์โทรศัพท์"));
                   },
                 },
               ]}
@@ -196,7 +210,7 @@ export const EditUser: React.FC<props> = ({ setIsModalOpenEdit, loadings, getdat
                 {
                   required: false,
                   type: "email",
-                  message: "Please input Email or is not valid E-mail!",
+                  message: "กรุณากรอกอีเมลให้ถูกต้อง!",
                 },
               ]}
             >
@@ -204,7 +218,7 @@ export const EditUser: React.FC<props> = ({ setIsModalOpenEdit, loadings, getdat
             </Form.Item>
           </Col>
           <Col span={12}>
-            <Form.Item name={"line"} label={`Line`}>
+            <Form.Item name={"line"} label={`Line ID`}>
               <Input placeholder="Text" />
             </Form.Item>
           </Col>
