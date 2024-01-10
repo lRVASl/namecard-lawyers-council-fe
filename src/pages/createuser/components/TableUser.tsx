@@ -101,9 +101,9 @@ export const TableUser: React.FC<props> = ({ dataresult, loading, loadings }): R
       },
     },
     { title: "ชื่อ (ไทย)", dataIndex: "name_th", key: "name_th" },
-    { title: "สกุล (ไทย)", dataIndex: "lastname_th", key: "lastname_th" },
+    { title: "นามสกุล (ไทย)", dataIndex: "lastname_th", key: "lastname_th" },
     { title: "ชื่อ (อังกฤษ)", dataIndex: "name_en", key: "name_en" },
-    { title: "สกุล (อังกฤษ)", dataIndex: "lastname_en", key: "lastname_en" },
+    { title: "นามสกุล (อังกฤษ)", dataIndex: "lastname_en", key: "lastname_en" },
     { title: "ตำแหน่ง", dataIndex: "position", key: "position" },
     { title: "เบอร์โทรศัพท์", dataIndex: "phone_number", key: "phone_number" },
     { title: "อีเมล", dataIndex: "email", key: "email" },
@@ -204,7 +204,7 @@ export const TableUser: React.FC<props> = ({ dataresult, loading, loadings }): R
         dataSource={dataresult}
         columns={columns}
         rowKey={(e: IDetailnamecard) => e.id}
-        scroll={{ x: "calc(700px + 100%)" }}
+        scroll={{ x: "calc(800px + 100%)" }}
         onChange={onChange}
       />
     </div>

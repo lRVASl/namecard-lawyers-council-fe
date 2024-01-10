@@ -38,7 +38,7 @@ export const EditUser: React.FC<props> = ({ setIsModalOpenEdit, loadings, getdat
     FORM.resetFields();
   };
 
-  const onfinish = (event: IDetailnamecard) => {
+  const onfinish = async (event: IDetailnamecard) => {
     if (
       (event.name_th === undefined || event.name_th === null) &&
       (event.lastname_th === null || event.lastname_th === undefined) &&
@@ -50,7 +50,7 @@ export const EditUser: React.FC<props> = ({ setIsModalOpenEdit, loadings, getdat
       (event.facebook === null || event.facebook === undefined) &&
       fileList.length === 0
     ) {
-      message.error("กรุณากรอกข้อมูลอย่งาน้อย 1 ข้อมูล");
+      message.error("กรุณากรอกข้อมูลอย่างน้อย 1 ข้อมูล");
       return;
     }
     const body = {
@@ -63,34 +63,34 @@ export const EditUser: React.FC<props> = ({ setIsModalOpenEdit, loadings, getdat
         },
       },
     };
-    Modal.confirm({
-      title: "คุณต้องการแก้ไขข้อมูลผู้ใช้งานใช่หรือไม่ ?",
-      icon: <ExclamationCircleOutlined />,
-      content: "กดยืนยันเพื่อแก้ไขข้อมูลผู้ใช้งาน",
-      okText: "ยืนยัน",
-      cancelText: "ยกเลิก",
-      onOk: async () => {
-        const createusers = await namecardService.updateuser(body as any);
-        if (createusers) {
-          if (fileList.length >= 1) {
-            const formData: any = new FormData();
-            formData.append("images", fileList[0].originFileObj);
-            const dataDeleteImage = await namecardService.deleteImageGhs(String(getdataresult?.member_number));
-            if (dataDeleteImage) {
-              const images = await namecardService.uploadNewImages(String(getdataresult?.member_number), formData);
-            }
-          }
-          message.success(`แก้ไขข้อมูลผู้ใช้งานสำเร็จ`);
-          setIsModalOpenEdit(false);
-          loadings(true);
-          FORM.resetFields();
+    // Modal.confirm({
+    //   title: "คุณต้องการแก้ไขข้อมูลผู้ใช้งานใช่หรือไม่ ?",
+    //   icon: <ExclamationCircleOutlined />,
+    //   content: "กดยืนยันเพื่อแก้ไขข้อมูลผู้ใช้งาน",
+    //   okText: "ยืนยัน",
+    //   cancelText: "ยกเลิก",
+    //   onOk: async () => {
+    const createusers = await namecardService.updateuser(body as any);
+    if (createusers) {
+      if (fileList.length >= 1) {
+        const formData: any = new FormData();
+        formData.append("images", fileList[0].originFileObj);
+        const dataDeleteImage = await namecardService.deleteImageGhs(String(getdataresult?.member_number));
+        if (dataDeleteImage) {
+          const images = await namecardService.uploadNewImages(String(getdataresult?.member_number), formData);
         }
-      },
-      onCancel: async () => {
-        loadings(false);
-        setIsModalOpenEdit(false);
-      },
-    });
+      }
+      message.success(`แก้ไขข้อมูลผู้ใช้งานสำเร็จ`);
+      setIsModalOpenEdit(false);
+      loadings(true);
+      FORM.resetFields();
+    }
+    // },
+    //   onCancel: async () => {
+    //     loadings(false);
+    //     setIsModalOpenEdit(false);
+    //   },
+    // });
   };
 
   const validatePhone = (number: string) => {
@@ -98,6 +98,12 @@ export const EditUser: React.FC<props> = ({ setIsModalOpenEdit, loadings, getdat
       return true;
     }
     return /^[0-9]{1,10}$/.test(number);
+  };
+  const validateEmail = (mail: any) => {
+    if (!mail) {
+      return true;
+    }
+    return /\S+@\S+\.\S+/.test(mail);
   };
   const uploadButton = (
     <div>
@@ -159,27 +165,27 @@ export const EditUser: React.FC<props> = ({ setIsModalOpenEdit, loadings, getdat
             </Form.Item>
           </Col>
           <Col span={12}>
-            <Form.Item name={"name_th"} label={`ชื่อ (ไทย)`}>
+            <Form.Item name={"name_th"} label={`ชื่อ (ไทย)`} rules={[{ required: true }]}>
               <Input placeholder="Text" />
             </Form.Item>
           </Col>
           <Col span={12}>
-            <Form.Item name={"lastname_th"} label={`นามสกุล (ไทย)`}>
+            <Form.Item name={"lastname_th"} label={`นามสกุล (ไทย)`} rules={[{ required: true }]}>
               <Input placeholder="Text" />
             </Form.Item>
           </Col>
           <Col span={12}>
-            <Form.Item name={"name_en"} label={`ชื่อ (อังกฤษ)`}>
+            <Form.Item name={"name_en"} label={`ชื่อ (อังกฤษ)`} rules={[{ required: true }]}>
               <Input placeholder="Text" />
             </Form.Item>
           </Col>
           <Col span={12}>
-            <Form.Item name={"lastname_en"} label={`นามสกุล (อังกฤษ)`}>
+            <Form.Item name={"lastname_en"} label={`นามสกุล (อังกฤษ)`} rules={[{ required: true }]}>
               <Input placeholder="Text" />
             </Form.Item>
           </Col>
           <Col span={12}>
-            <Form.Item name={"position"} label={`ตำแหน่ง`}>
+            <Form.Item name={"position"} label={`ตำแหน่ง`} rules={[{ required: true }]}>
               <Input placeholder="Text" />
             </Form.Item>
           </Col>
@@ -189,12 +195,17 @@ export const EditUser: React.FC<props> = ({ setIsModalOpenEdit, loadings, getdat
               label={`เบอร์โทรศัพท์`}
               rules={[
                 {
-                  required: false,
+                  required: true,
                   validator: async (_, storeValue) => {
                     if (validatePhone(storeValue)) {
-                      return Promise.resolve(storeValue);
+                      if (storeValue === "") {
+                        return Promise.reject(new Error("กรุณากรอกเบอร์โทรศัพท์"));
+                      } else {
+                        return Promise.resolve(storeValue);
+                      }
+                    } else {
+                      return Promise.reject(new Error("กรุณากรอกเบอร์โทรศัพท์ให้ถูกต้อง"));
                     }
-                    return Promise.reject(new Error("กรุณากรอกเบอร์โทรศัพท์"));
                   },
                 },
               ]}
@@ -208,9 +219,19 @@ export const EditUser: React.FC<props> = ({ setIsModalOpenEdit, loadings, getdat
               label={`อีเมล`}
               rules={[
                 {
-                  required: false,
+                  required: true,
                   type: "email",
-                  message: "กรุณากรอกอีเมลให้ถูกต้อง!",
+                  validator: async (_, storeValue) => {
+                    if (validateEmail(storeValue)) {
+                      if (storeValue === "") {
+                        return Promise.reject(new Error("กรุณากรอกอีเมล"));
+                      } else {
+                        return Promise.resolve(storeValue);
+                      }
+                    } else {
+                      return Promise.reject(new Error("กรุณากรอกอีเมลให้ถูกต้อง"));
+                    }
+                  },
                 },
               ]}
             >

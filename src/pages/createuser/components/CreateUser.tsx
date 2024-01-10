@@ -44,6 +44,12 @@ export const CreateUser: React.FC<props> = ({ setIsModalOpen, loading }): React.
     }
     return /^[0-9]{1,10}$/.test(number);
   };
+  const validateEmail = (mail: any) => {
+    if (!mail) {
+      return true;
+    }
+    return /\S+@\S+\.\S+/.test(mail);
+  };
 
   const uploadButton = (
     <div>
@@ -65,7 +71,7 @@ export const CreateUser: React.FC<props> = ({ setIsModalOpen, loading }): React.
       fileList.length === 0
     ) {
       message.error("กรุณากรอกข้อมูลอย่งาน้อย 1 ข้อมูล");
-      return;
+      return true;
     }
     const uuidNumber: string = uuidv4();
     const body = {
@@ -74,31 +80,31 @@ export const CreateUser: React.FC<props> = ({ setIsModalOpen, loading }): React.
         member_number: uuidNumber,
       },
     };
-    Modal.confirm({
-      title: "คุณต้องการสร้างผู้ใช้งานใหม่ใช่หรือไม่ ?",
-      icon: <ExclamationCircleOutlined />,
-      content: "กดยืนยันเพื่อสร้างผู้ใช้งานใหม่",
-      okText: "ยืนยัน",
-      cancelText: "ยกเลิก",
-      onOk: async () => {
-        const createusers = await namecardService.createUser(body as any);
-        if (createusers) {
-          if (fileList.length > 0) {
-            const formData: any = new FormData();
-            formData.append("images", fileList[0].originFileObj);
-            const images = await namecardService.uploadNewImages(uuidNumber, formData);
-          }
-          message.success(`สร้างผู้ใช้งานใหม่สำเร็จ`);
-          setIsModalOpen(false);
-          loading(true);
-          FORM.resetFields();
-        }
-      },
-      onCancel: async () => {
-        loading(false);
-        setIsModalOpen(false);
-      },
-    });
+    // Modal.confirm({
+    //   title: "คุณต้องการสร้างผู้ใช้งานใหม่ใช่หรือไม่ ?",
+    //   icon: <ExclamationCircleOutlined />,
+    //   content: "กดยืนยันเพื่อสร้างผู้ใช้งานใหม่",
+    //   okText: "ยืนยัน",
+    //   cancelText: "ยกเลิก",
+    //   onOk: async () => {
+    const createusers = await namecardService.createUser(body as any);
+    if (createusers) {
+      if (fileList.length > 0) {
+        const formData: any = new FormData();
+        formData.append("images", fileList[0].originFileObj);
+        const images = await namecardService.uploadNewImages(uuidNumber, formData);
+      }
+      message.success(`สร้างผู้ใช้งานใหม่สำเร็จ`);
+      setIsModalOpen(false);
+      loading(true);
+      FORM.resetFields();
+    }
+    //   },
+    //   onCancel: async () => {
+    //     loading(false);
+    //     setIsModalOpen(false);
+    //   },
+    // });
   };
 
   const beforeUpload = (file: RcFile) => {
@@ -132,27 +138,27 @@ export const CreateUser: React.FC<props> = ({ setIsModalOpen, loading }): React.
             </ImgCrop>
           </Col>
           <Col span={12}>
-            <Form.Item name={"name_th"} label={`ชื่อ (ไทย)`}>
+            <Form.Item name={"name_th"} label={`ชื่อ (ไทย)`} rules={[{ required: true }]}>
               <Input placeholder="Text" />
             </Form.Item>
           </Col>
           <Col span={12}>
-            <Form.Item name={"lastname_th"} label={`นามสกุล (ไทย)`}>
+            <Form.Item name={"lastname_th"} label={`นามสกุล (ไทย)`} rules={[{ required: true }]}>
               <Input placeholder="Text" />
             </Form.Item>
           </Col>
           <Col span={12}>
-            <Form.Item name={"name_en"} label={`ชื่อ (อังกฤษ)`}>
+            <Form.Item name={"name_en"} label={`ชื่อ (อังกฤษ)`} rules={[{ required: true }]}>
               <Input placeholder="Text" />
             </Form.Item>
           </Col>
           <Col span={12}>
-            <Form.Item name={"lastname_en"} label={`นามสกุล (อังกฤษ)`}>
+            <Form.Item name={"lastname_en"} label={`นามสกุล (อังกฤษ)`} rules={[{ required: true }]}>
               <Input placeholder="Text" />
             </Form.Item>
           </Col>
           <Col span={12}>
-            <Form.Item name={"position"} label={`ตำแหน่ง`}>
+            <Form.Item name={"position"} label={`ตำแหน่ง`} rules={[{ required: true }]}>
               <Input placeholder="Text" />
             </Form.Item>
           </Col>
@@ -162,7 +168,7 @@ export const CreateUser: React.FC<props> = ({ setIsModalOpen, loading }): React.
               label={`เบอร์โทรศัพท์`}
               rules={[
                 {
-                  required: false,
+                  required: true,
                   validator: async (_, storeValue) => {
                     if (validatePhone(storeValue)) {
                       return Promise.resolve(storeValue);
@@ -181,9 +187,19 @@ export const CreateUser: React.FC<props> = ({ setIsModalOpen, loading }): React.
               label={`อีเมล`}
               rules={[
                 {
-                  required: false,
+                  required: true,
                   type: "email",
-                  message: "กรุณากรอกอีเมลให้ถูกต้อง!",
+                  validator: async (_, storeValue) => {
+                    if (validateEmail(storeValue)) {
+                      if (storeValue === "") {
+                        return Promise.reject(new Error("กรุณากรอกอีเมล"));
+                      } else {
+                        return Promise.resolve(storeValue);
+                      }
+                    } else {
+                      return Promise.reject(new Error("กรุณากรอกอีเมลให้ถูกต้อง"));
+                    }
+                  },
                 },
               ]}
             >
