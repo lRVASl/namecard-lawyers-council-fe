@@ -4,16 +4,6 @@ import { IDetailnamecard } from "../common";
 export const NamecardService = (axiosInstance: AxiosInstance) => {
   const apiNamecardLawyers = "/namecard-lawyers";
   return {
-    // namecard: async () => {
-    //   return await axiosInstance
-    //     .get(`http://18.139.111.131/intra/api/user.php?userId=suradachk`, {
-    //       headers: {
-    //         Authorization: "Bearer osdadminapisuperkey",
-    //       },
-    //     })
-    //     .then((result) => result);
-    // },
-
     findAllMember: () => {
       return axiosInstance
         .get(`${apiNamecardLawyers}`)
@@ -25,7 +15,7 @@ export const NamecardService = (axiosInstance: AxiosInstance) => {
       return await axiosInstance
         .get(`${apiNamecardLawyers}/get_image/namecard?image=${condition}`, { responseType: "blob" })
         .then((result) => result.data)
-        .catch((err) => console.log(err.data));
+        .catch((err) => err.data);
     },
 
     findMemberByID: (id: number) => {

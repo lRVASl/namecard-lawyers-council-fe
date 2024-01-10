@@ -63,13 +63,7 @@ export const EditUser: React.FC<props> = ({ setIsModalOpenEdit, loadings, getdat
         },
       },
     };
-    // Modal.confirm({
-    //   title: "คุณต้องการแก้ไขข้อมูลผู้ใช้งานใช่หรือไม่ ?",
-    //   icon: <ExclamationCircleOutlined />,
-    //   content: "กดยืนยันเพื่อแก้ไขข้อมูลผู้ใช้งาน",
-    //   okText: "ยืนยัน",
-    //   cancelText: "ยกเลิก",
-    //   onOk: async () => {
+
     const createusers = await namecardService.updateuser(body as any);
     if (createusers) {
       if (fileList.length >= 1) {
@@ -85,12 +79,6 @@ export const EditUser: React.FC<props> = ({ setIsModalOpenEdit, loadings, getdat
       loadings(true);
       FORM.resetFields();
     }
-    // },
-    //   onCancel: async () => {
-    //     loadings(false);
-    //     setIsModalOpenEdit(false);
-    //   },
-    // });
   };
 
   const validatePhone = (number: string) => {
@@ -112,7 +100,7 @@ export const EditUser: React.FC<props> = ({ setIsModalOpenEdit, loadings, getdat
     </div>
   );
   const handlePreview = async (file: UploadFile) => {
-    setPreviewImage(file.thumbUrl || (file.preview as string));
+    setPreviewImage(file.thumbUrl || (file.preview as string) || (file.url as string));
     setPreviewOpen(true);
     setPreviewTitle(file.name || file.thumbUrl!.substring(file.url!.lastIndexOf("/") + 1));
   };
@@ -198,7 +186,7 @@ export const EditUser: React.FC<props> = ({ setIsModalOpenEdit, loadings, getdat
                   required: true,
                   validator: async (_, storeValue) => {
                     if (validatePhone(storeValue)) {
-                      if (storeValue === "") {
+                      if (storeValue === "" || storeValue === undefined || storeValue === null) {
                         return Promise.reject(new Error("กรุณากรอกเบอร์โทรศัพท์"));
                       } else {
                         return Promise.resolve(storeValue);
@@ -223,7 +211,7 @@ export const EditUser: React.FC<props> = ({ setIsModalOpenEdit, loadings, getdat
                   type: "email",
                   validator: async (_, storeValue) => {
                     if (validateEmail(storeValue)) {
-                      if (storeValue === "") {
+                      if (storeValue === "" || storeValue === undefined || storeValue === null) {
                         return Promise.reject(new Error("กรุณากรอกอีเมล"));
                       } else {
                         return Promise.resolve(storeValue);

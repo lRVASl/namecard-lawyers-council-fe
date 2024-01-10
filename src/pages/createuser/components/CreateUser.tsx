@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Button, Col, Form, Input, Modal, Row, Space, message } from "antd";
+import React, { useEffect, useState } from "react";
+import { Button, Col, Form, Input, Modal, Row, Space, message, Image } from "antd";
 import { ExclamationCircleOutlined, PlusOutlined } from "@ant-design/icons";
 import { NamecardService } from "../../services/e_name_card.service";
 import { axiosInstance } from "../../../configs/config";
@@ -24,7 +24,7 @@ export const CreateUser: React.FC<props> = ({ setIsModalOpen, loading }): React.
   const [fileList, setFileList] = useState<UploadFile[]>([]);
 
   const handlePreview = async (file: UploadFile) => {
-    setPreviewImage(file.url || (file.preview as string));
+    setPreviewImage(file.url || (file.preview as string) || (file.thumbUrl as string));
     setPreviewOpen(true);
     setPreviewTitle(file.name || file.url!.substring(file.url!.lastIndexOf("/") + 1));
   };
@@ -34,7 +34,6 @@ export const CreateUser: React.FC<props> = ({ setIsModalOpen, loading }): React.
 
   const handleCancel = () => {
     setPreviewOpen(false);
-    setIsModalOpen(false);
     FORM.resetFields();
   };
 
@@ -80,13 +79,7 @@ export const CreateUser: React.FC<props> = ({ setIsModalOpen, loading }): React.
         member_number: uuidNumber,
       },
     };
-    // Modal.confirm({
-    //   title: "คุณต้องการสร้างผู้ใช้งานใหม่ใช่หรือไม่ ?",
-    //   icon: <ExclamationCircleOutlined />,
-    //   content: "กดยืนยันเพื่อสร้างผู้ใช้งานใหม่",
-    //   okText: "ยืนยัน",
-    //   cancelText: "ยกเลิก",
-    //   onOk: async () => {
+
     const createusers = await namecardService.createUser(body as any);
     if (createusers) {
       if (fileList.length > 0) {
@@ -99,16 +92,9 @@ export const CreateUser: React.FC<props> = ({ setIsModalOpen, loading }): React.
       loading(true);
       FORM.resetFields();
     }
-    //   },
-    //   onCancel: async () => {
-    //     loading(false);
-    //     setIsModalOpen(false);
-    //   },
-    // });
   };
 
   const beforeUpload = (file: RcFile) => {
-    console.log(file);
     const isLt2M = file.size / 1024 / 1024 < 20;
     if (!isLt2M) {
       message.error("Image must smaller than 20MB!");
@@ -118,7 +104,7 @@ export const CreateUser: React.FC<props> = ({ setIsModalOpen, loading }): React.
 
   return (
     <div>
-      <Modal open={previewOpen} title={previewTitle} footer={null} onCancel={handleCancel}>
+      <Modal open={previewOpen} title={previewTitle} footer={null} onCancel={() => setPreviewOpen(false)}>
         <img style={{ width: "100%" }} src={previewImage} />
       </Modal>
       <Form name="createuser" form={FORM} layout="vertical" onFinish={onfinish}>
@@ -138,27 +124,27 @@ export const CreateUser: React.FC<props> = ({ setIsModalOpen, loading }): React.
             </ImgCrop>
           </Col>
           <Col span={12}>
-            <Form.Item name={"name_th"} label={`ชื่อ (ไทย)`} rules={[{ required: true }]}>
+            <Form.Item name={"name_th"} label={`ชื่อ (ไทย)`} rules={[{ required: true, message: "กรุณากรอกชื่อเป็นภาษาไทย" }]}>
               <Input placeholder="Text" />
             </Form.Item>
           </Col>
           <Col span={12}>
-            <Form.Item name={"lastname_th"} label={`นามสกุล (ไทย)`} rules={[{ required: true }]}>
+            <Form.Item name={"lastname_th"} label={`นามสกุล (ไทย)`} rules={[{ required: true, message: "กรุณากรอกนามสกุลเป็นภาษาไทย" }]}>
               <Input placeholder="Text" />
             </Form.Item>
           </Col>
           <Col span={12}>
-            <Form.Item name={"name_en"} label={`ชื่อ (อังกฤษ)`} rules={[{ required: true }]}>
+            <Form.Item name={"name_en"} label={`ชื่อ (อังกฤษ)`} rules={[{ required: true, message: "กรุณากรอกชื่อเป็นภาษาอังกฤษ" }]}>
               <Input placeholder="Text" />
             </Form.Item>
           </Col>
           <Col span={12}>
-            <Form.Item name={"lastname_en"} label={`นามสกุล (อังกฤษ)`} rules={[{ required: true }]}>
+            <Form.Item name={"lastname_en"} label={`นามสกุล (อังกฤษ)`} rules={[{ required: true, message: "กรุณากรอกนามสกุลเป็นภาษาอังกฤษ" }]}>
               <Input placeholder="Text" />
             </Form.Item>
           </Col>
           <Col span={12}>
-            <Form.Item name={"position"} label={`ตำแหน่ง`} rules={[{ required: true }]}>
+            <Form.Item name={"position"} label={`ตำแหน่ง`} rules={[{ required: true, message: "กรุณากรอกตำแหน่ง" }]}>
               <Input placeholder="Text" />
             </Form.Item>
           </Col>
@@ -171,7 +157,11 @@ export const CreateUser: React.FC<props> = ({ setIsModalOpen, loading }): React.
                   required: true,
                   validator: async (_, storeValue) => {
                     if (validatePhone(storeValue)) {
-                      return Promise.resolve(storeValue);
+                      if (storeValue === "" || storeValue === undefined || storeValue === null) {
+                        return Promise.reject(new Error("กรุณากรอกเบอร์โทรศัพท์"));
+                      } else {
+                        return Promise.resolve(storeValue);
+                      }
                     }
                     return Promise.reject(new Error("กรุณากรอกเบอร์โทรศัพท์"));
                   },
@@ -191,7 +181,7 @@ export const CreateUser: React.FC<props> = ({ setIsModalOpen, loading }): React.
                   type: "email",
                   validator: async (_, storeValue) => {
                     if (validateEmail(storeValue)) {
-                      if (storeValue === "") {
+                      if (storeValue === "" || storeValue === undefined || storeValue === null) {
                         return Promise.reject(new Error("กรุณากรอกอีเมล"));
                       } else {
                         return Promise.resolve(storeValue);

@@ -24,7 +24,6 @@ export const NameCard: React.FC<{}> = (): React.ReactElement => {
   const [searchParams] = useSearchParams();
   let userId: string | null = searchParams.get("userId");
   const [data, setData] = useState<IDetailnamecard>();
-  const [getImage, setImage] = useState<any>();
 
   useEffect(() => {
     fectdata();
@@ -32,17 +31,10 @@ export const NameCard: React.FC<{}> = (): React.ReactElement => {
   const fectdata = async () => {
     const resEvents = await namecardService.findMemberByID(Number(userId));
     if (resEvents) {
-      // const data = await Promise.all(
-      //   resEvents.map(async (event: any) => {
-      //     const imageData = await dataImages(event);
-      //     const mapData = {
-      //       ...event,
-      //       imagefile: imageData,
-      //     };
-      //     return mapData;
-      //   }),
-      // );
-      const getImages = await namecardService.getImages(resEvents[0].images_namecard[0]?.idfile);
+      let getImages: any = [];
+      if (resEvents[0].images_namecard.length !== 0) {
+        getImages = await namecardService.getImages(resEvents[0].images_namecard[0]?.idfile);
+      }
       setData({ ...resEvents[0], imagefile: getImages });
     }
   };
@@ -94,18 +86,18 @@ END:VCARD`;
           <Card className="cardIncontent" bodyStyle={{ padding: "5px" }}>
             <Avatar
               className="avatar"
-              src={data ? URL.createObjectURL(data?.imagefile) : ""}
+              src={data?.imagefile.length !== 0 ? URL.createObjectURL(data?.imagefile) : ""}
               style={{
                 backgroundPosition: "center",
                 backgroundRepeat: "no-repeat",
                 backgroundSize: "cover",
-                borderWidth: "4px",
+                borderWidth: "2px",
                 backgroundColor: "lightgray",
               }}
             />
-            <Typography className="typoHeader">{data ? `${data?.name_th}  ${data?.lastname_th}` : ""}</Typography>
-            <Typography className="typoHeader-en">{data ? `( ${data?.name_en}  ${data?.lastname_en} )` : ""}</Typography>
-            <Typography className="typoDetail">{`${data?.position}`}</Typography>
+            <Typography className="typoHeader">{data?.name_th ? `${data?.name_th}  ${data?.lastname_th}` : "-"}</Typography>
+            <Typography className="typoHeader-en">{data?.name_en ? `( ${data?.name_en}  ${data?.lastname_en} )` : "-"}</Typography>
+            <Typography className="typoDetail">{data?.position ? `${data?.position}` : "-"}</Typography>
             <div
               style={{
                 padding: "20px 8px 20px 8px",
@@ -113,11 +105,11 @@ END:VCARD`;
             >
               <Space className="iconContact">
                 <PhoneFilled rotate={90} style={{ fontSize: "18px", color: "#2D43A6" }} />
-                <Typography className="typodetail-contact">{`${data?.phone_number}`}</Typography>
+                <Typography className="typodetail-contact">{data?.phone_number ? `${data?.phone_number}` : "-"}</Typography>
               </Space>
               <Space className="iconContact">
                 <MailFilled style={{ color: "#2D43A6" }} />
-                <Typography className="typodetail-contact">{`${data?.email}`}</Typography>
+                <Typography className="typodetail-contact">{data?.email ? `${data?.email}` : "-"}</Typography>
               </Space>
               <Space className="iconContact">
                 <Icon icon={lineAppFill} style={{ color: "#2D43A6" }} />
@@ -140,7 +132,6 @@ END:VCARD`;
               <Typography className="textincardcontent">{`
 F : +662 522 7138`}</Typography>
             </Card>
-            {/* <Row gutter={[0, 8]} className="divIcon"> */}
             <div style={{ justifyContent: "space-around", display: "flex" }}>
               <div>
                 <Button type="link" onClick={() => handleCall()} className="divIcon">

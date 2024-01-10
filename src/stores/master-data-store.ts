@@ -1,5 +1,5 @@
-import { AxiosResponse } from 'axios';
-import { makeAutoObservable } from 'mobx';
+import { AxiosResponse } from "axios";
+import { makeAutoObservable } from "mobx";
 import {
   AccountStatus,
   getAccountStatuses,
@@ -12,7 +12,7 @@ import {
   Oa,
   ProductType,
   UserBank,
-} from './master-data.service';
+} from "./master-data.service";
 
 class MasterDataStore {
   constructor() {

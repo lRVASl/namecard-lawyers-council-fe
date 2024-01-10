@@ -60,7 +60,7 @@ export const MainLayout: React.FC = () => {
             <MainMenu />
             <Button
               type="primary"
-              style={{ width: "93%", border: "none" }}
+              style={{ width: "190px", border: "none", position: "fixed", bottom: "10px", marginLeft: "-96px" }}
               onClick={() => logout().then(() => login(window.location.href, false))}
               danger
             >
