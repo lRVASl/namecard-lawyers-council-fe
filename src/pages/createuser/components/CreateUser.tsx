@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Button, Col, Form, Input, Modal, Row, Space, message, Image } from "antd";
-import { ExclamationCircleOutlined, PlusOutlined } from "@ant-design/icons";
+import { PlusOutlined } from "@ant-design/icons";
 import { NamecardService } from "../../services/e_name_card.service";
 import { axiosInstance } from "../../../configs/config";
 import { v4 as uuidv4 } from "uuid";
@@ -25,15 +25,15 @@ export const CreateUser: React.FC<props> = ({ setIsModalOpen, loading }): React.
 
   const handlePreview = async (file: UploadFile) => {
     setPreviewImage(file.url || (file.preview as string) || (file.thumbUrl as string));
-    setPreviewOpen(true);
     setPreviewTitle(file.name || file.url!.substring(file.url!.lastIndexOf("/") + 1));
+    setPreviewOpen(true);
   };
   const handleChange: UploadProps["onChange"] = async ({ fileList: newFileList }) => {
     return await setFileList(newFileList);
   };
 
-  const handleCancel = () => {
-    setPreviewOpen(false);
+  const handleCancelmodal = () => {
+    setIsModalOpen(false);
     FORM.resetFields();
   };
 
@@ -95,11 +95,11 @@ export const CreateUser: React.FC<props> = ({ setIsModalOpen, loading }): React.
   };
 
   const beforeUpload = (file: RcFile) => {
-    const isLt2M = file.size / 1024 / 1024 < 20;
-    if (!isLt2M) {
+    const isLt20M = file.size / 1024 / 1024 < 20;
+    if (!isLt20M) {
       message.error("Image must smaller than 20MB!");
     }
-    return isLt2M;
+    return isLt20M;
   };
 
   return (
@@ -125,27 +125,27 @@ export const CreateUser: React.FC<props> = ({ setIsModalOpen, loading }): React.
           </Col>
           <Col span={12}>
             <Form.Item name={"name_th"} label={`ชื่อ (ไทย)`} rules={[{ required: true, message: "กรุณากรอกชื่อเป็นภาษาไทย" }]}>
-              <Input placeholder="Text" />
+              <Input placeholder="ข้อความ" />
             </Form.Item>
           </Col>
           <Col span={12}>
             <Form.Item name={"lastname_th"} label={`นามสกุล (ไทย)`} rules={[{ required: true, message: "กรุณากรอกนามสกุลเป็นภาษาไทย" }]}>
-              <Input placeholder="Text" />
+              <Input placeholder="ข้อความ" />
             </Form.Item>
           </Col>
           <Col span={12}>
             <Form.Item name={"name_en"} label={`ชื่อ (อังกฤษ)`} rules={[{ required: true, message: "กรุณากรอกชื่อเป็นภาษาอังกฤษ" }]}>
-              <Input placeholder="Text" />
+              <Input placeholder="ข้อความ" />
             </Form.Item>
           </Col>
           <Col span={12}>
             <Form.Item name={"lastname_en"} label={`นามสกุล (อังกฤษ)`} rules={[{ required: true, message: "กรุณากรอกนามสกุลเป็นภาษาอังกฤษ" }]}>
-              <Input placeholder="Text" />
+              <Input placeholder="ข้อความ" />
             </Form.Item>
           </Col>
           <Col span={12}>
             <Form.Item name={"position"} label={`ตำแหน่ง`} rules={[{ required: true, message: "กรุณากรอกตำแหน่ง" }]}>
-              <Input placeholder="Text" />
+              <Input placeholder="ข้อความ" />
             </Form.Item>
           </Col>
           <Col span={12}>
@@ -168,7 +168,7 @@ export const CreateUser: React.FC<props> = ({ setIsModalOpen, loading }): React.
                 },
               ]}
             >
-              <Input placeholder="Text" maxLength={10} />
+              <Input placeholder="ข้อความ" maxLength={10} />
             </Form.Item>
           </Col>
           <Col span={12}>
@@ -193,23 +193,23 @@ export const CreateUser: React.FC<props> = ({ setIsModalOpen, loading }): React.
                 },
               ]}
             >
-              <Input placeholder="Text" />
+              <Input placeholder="ข้อความ" />
             </Form.Item>
           </Col>
           <Col span={12}>
             <Form.Item name={"line"} label={`Line ID`}>
-              <Input placeholder="Text" />
+              <Input placeholder="ข้อความ" />
             </Form.Item>
           </Col>
           <Col span={12}>
             <Form.Item name={"facebook"} label={`Facebook`}>
-              <Input placeholder="Text" />
+              <Input placeholder="ข้อความ" />
             </Form.Item>
           </Col>
           <Col span={24} style={{ justifyContent: "center", display: "flex" }}>
             <Space>
               <Form.Item>
-                <Button type="primary" danger onClick={() => handleCancel()}>{`ยกเลิก`}</Button>
+                <Button type="primary" danger onClick={() => handleCancelmodal()}>{`ยกเลิก`}</Button>
               </Form.Item>
               <Form.Item>
                 <Button type="primary" htmlType="submit">{`ยืนยัน`}</Button>

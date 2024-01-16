@@ -2,7 +2,7 @@ import { Button, Col, Form, Input, Modal, Row, Space, Upload, message, Image } f
 import React, { useState } from "react";
 import { axiosInstance } from "../../../configs/config";
 import { NamecardService } from "../../services/e_name_card.service";
-import { ExclamationCircleOutlined, PlusOutlined } from "@ant-design/icons";
+import { PlusOutlined } from "@ant-design/icons";
 import { IDetailnamecard } from "../../common";
 import ImgCrop from "antd-img-crop";
 import { RcFile, UploadFile, UploadProps } from "antd/es/upload";
@@ -17,7 +17,6 @@ export const EditUser: React.FC<props> = ({ setIsModalOpenEdit, loadings, getdat
   const namecardService = NamecardService(axiosInstance);
   const [FORM] = Form.useForm();
   const [fileList, setFileList] = useState<UploadFile[]>([]);
-  const [getImage, setImage] = useState<any>(getdataresult?.imagefile);
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState("");
   const [previewTitle, setPreviewTitle] = useState("");
@@ -63,16 +62,15 @@ export const EditUser: React.FC<props> = ({ setIsModalOpenEdit, loadings, getdat
         },
       },
     };
-
     const createusers = await namecardService.updateuser(body as any);
     if (createusers) {
-      if (fileList.length >= 1) {
+      if (fileList.length != 0) {
         const formData: any = new FormData();
         formData.append("images", fileList[0].originFileObj);
-        const dataDeleteImage = await namecardService.deleteImageGhs(String(getdataresult?.member_number));
-        if (dataDeleteImage) {
-          const images = await namecardService.uploadNewImages(String(getdataresult?.member_number), formData);
+        if (getdataresult?.imagefile) {
+          const dataDeleteImage = await namecardService.deleteImageGhs(String(getdataresult?.member_number));
         }
+        const images = await namecardService.uploadNewImages(String(getdataresult?.member_number), formData);
       }
       message.success(`แก้ไขข้อมูลผู้ใช้งานสำเร็จ`);
       setIsModalOpenEdit(false);
@@ -93,12 +91,14 @@ export const EditUser: React.FC<props> = ({ setIsModalOpenEdit, loadings, getdat
     }
     return /\S+@\S+\.\S+/.test(mail);
   };
+
   const uploadButton = (
     <div>
       <PlusOutlined />
       <div style={{ marginTop: 8 }}>{`อัพโหลด`}</div>
     </div>
   );
+
   const handlePreview = async (file: UploadFile) => {
     setPreviewImage(file.thumbUrl || (file.preview as string) || (file.url as string));
     setPreviewOpen(true);
@@ -110,11 +110,11 @@ export const EditUser: React.FC<props> = ({ setIsModalOpenEdit, loadings, getdat
   };
 
   const beforeUpload = (file: RcFile) => {
-    const isLt2M = file.size / 1024 / 1024 < 20;
-    if (!isLt2M) {
-      message.error("Image must smaller than 2MB!");
+    const isLt20M = file.size / 1024 / 1024 < 20;
+    if (!isLt20M) {
+      message.error("Image must smaller than 20MB!");
     }
-    return isLt2M;
+    return isLt20M;
   };
   return (
     <div>
@@ -127,11 +127,11 @@ export const EditUser: React.FC<props> = ({ setIsModalOpenEdit, loadings, getdat
             <Form.Item label={`รูปภาพ :`}>
               <Row gutter={[8, 8]} style={{ justifyContent: "center", display: "flex" }}>
                 <Space>
-                  {getImage === null ? (
+                  {getdataresult?.imagefile === null ? (
                     <></>
                   ) : fileList.length >= 1 ? null : (
                     <Col>
-                      <Image src={getImage ? URL.createObjectURL(getImage) : ""} width={100} />
+                      <Image src={getdataresult?.imagefile ? URL.createObjectURL(getdataresult?.imagefile) : ""} width={100} />
                     </Col>
                   )}
                   <Col>
@@ -153,28 +153,28 @@ export const EditUser: React.FC<props> = ({ setIsModalOpenEdit, loadings, getdat
             </Form.Item>
           </Col>
           <Col span={12}>
-            <Form.Item name={"name_th"} label={`ชื่อ (ไทย)`} rules={[{ required: true }]}>
-              <Input placeholder="Text" />
+            <Form.Item name={"name_th"} label={`ชื่อ (ไทย)`} rules={[{ required: true, message: "กรุณากรอกชื่อเป็นภาษาไทย" }]}>
+              <Input placeholder="ข้อความ" />
             </Form.Item>
           </Col>
           <Col span={12}>
-            <Form.Item name={"lastname_th"} label={`นามสกุล (ไทย)`} rules={[{ required: true }]}>
-              <Input placeholder="Text" />
+            <Form.Item name={"lastname_th"} label={`นามสกุล (ไทย)`} rules={[{ required: true, message: "กรุณากรอกนามสกุลเป็นภาษาไทย" }]}>
+              <Input placeholder="ข้อความ" />
             </Form.Item>
           </Col>
           <Col span={12}>
-            <Form.Item name={"name_en"} label={`ชื่อ (อังกฤษ)`} rules={[{ required: true }]}>
-              <Input placeholder="Text" />
+            <Form.Item name={"name_en"} label={`ชื่อ (อังกฤษ)`} rules={[{ required: true, message: "กรุณากรอกชื่อเป็นภาษาอังกฤษ" }]}>
+              <Input placeholder="ข้อความ" />
             </Form.Item>
           </Col>
           <Col span={12}>
-            <Form.Item name={"lastname_en"} label={`นามสกุล (อังกฤษ)`} rules={[{ required: true }]}>
-              <Input placeholder="Text" />
+            <Form.Item name={"lastname_en"} label={`นามสกุล (อังกฤษ)`} rules={[{ required: true, message: "กรุณากรอกนามสกุลเป็นภาษาอังกฤษ" }]}>
+              <Input placeholder="ข้อความ" />
             </Form.Item>
           </Col>
           <Col span={12}>
-            <Form.Item name={"position"} label={`ตำแหน่ง`} rules={[{ required: true }]}>
-              <Input placeholder="Text" />
+            <Form.Item name={"position"} label={`ตำแหน่ง`} rules={[{ required: true, message: "กรุณากรอกตำแหน่ง" }]}>
+              <Input placeholder="ข้อความ" />
             </Form.Item>
           </Col>
           <Col span={12}>
@@ -192,13 +192,13 @@ export const EditUser: React.FC<props> = ({ setIsModalOpenEdit, loadings, getdat
                         return Promise.resolve(storeValue);
                       }
                     } else {
-                      return Promise.reject(new Error("กรุณากรอกเบอร์โทรศัพท์ให้ถูกต้อง"));
+                      return Promise.reject(new Error("กรุณากรอกเบอร์โทรศัพท์"));
                     }
                   },
                 },
               ]}
             >
-              <Input placeholder="Text" maxLength={10} />
+              <Input placeholder="ข้อความ" maxLength={10} />
             </Form.Item>
           </Col>
           <Col span={12}>
@@ -223,17 +223,17 @@ export const EditUser: React.FC<props> = ({ setIsModalOpenEdit, loadings, getdat
                 },
               ]}
             >
-              <Input placeholder="Text" />
+              <Input placeholder="ข้อความ" />
             </Form.Item>
           </Col>
           <Col span={12}>
             <Form.Item name={"line"} label={`Line ID`}>
-              <Input placeholder="Text" />
+              <Input placeholder="ข้อความ" />
             </Form.Item>
           </Col>
           <Col span={12}>
             <Form.Item name={"facebook"} label={`Facebook`}>
-              <Input placeholder="Text" />
+              <Input placeholder="ข้อความ" />
             </Form.Item>
           </Col>
           <Col span={24} style={{ justifyContent: "center", display: "flex" }}>

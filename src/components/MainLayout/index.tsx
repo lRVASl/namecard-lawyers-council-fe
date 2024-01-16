@@ -64,7 +64,7 @@ export const MainLayout: React.FC = () => {
               onClick={() => logout().then(() => login(window.location.href, false))}
               danger
             >
-              {`Logout`}
+              {`ออกจากระบบ`}
             </Button>
           </Sider>
           <Layout className="site-layout" style={{ paddingLeft: 200 }}>

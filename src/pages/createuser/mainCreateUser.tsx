@@ -14,6 +14,7 @@ export const MainCreateUser: React.FC<{}> = ({}): React.ReactElement => {
   useEffect(() => {
     fectdata();
   }, [loading]);
+
   const fectdata = async () => {
     const resEvents = await namecardService.findAllMember();
     if (resEvents) {
@@ -31,6 +32,7 @@ export const MainCreateUser: React.FC<{}> = ({}): React.ReactElement => {
     }
     setLoading(false);
   };
+  
   const dataImages = async (e: any) => {
     if (e.images_namecard.length >= 1) {
       const getImages = await namecardService.getImages(e.images_namecard[0]?.idfile);

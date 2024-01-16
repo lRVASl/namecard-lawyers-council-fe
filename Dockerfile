@@ -30,4 +30,5 @@ RUN chgrp -R root /var/run && chmod -R 770 /var/run
 ADD deploy/default.conf /etc/nginx/conf.d/
 RUN mkdir -p /usr/share/nginx/html
 COPY --from=builder /app/build /usr/share/nginx/html
+
 EXPOSE 80

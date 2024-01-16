@@ -28,6 +28,10 @@ export const TableUser: React.FC<props> = ({ dataresult, loading, loadings }): R
   const [menberNumber, setMember_number] = useState<string>("");
   const [getdataresult, setdataresult] = useState<IDetailnamecard>();
 
+  console.log(dataresult);
+
+  useEffect(() => {}, [getdataresult]);
+
   const showModalDel = (e: string, member_number: string) => {
     setnumber(Number(e));
     setMember_number(member_number);
@@ -45,8 +49,8 @@ export const TableUser: React.FC<props> = ({ dataresult, loading, loadings }): R
     setIsModalOpenDel(false);
   };
 
-  const showModalEdit = (e: IDetailnamecard) => {
-    setdataresult(e);
+  const showModalEdit = (event: any) => {
+    setdataresult(event);
     setIsModalOpenEdit(true);
   };
 
