@@ -9,6 +9,7 @@ import QRCode from "qrcode.react";
 import html2canvas from "html2canvas";
 import { EditUser } from "./EditUser";
 import { async } from "q";
+import { UploadFile } from "antd/lib/upload/interface";
 
 export interface props {
   dataresult: IDetailnamecard[];
@@ -28,8 +29,7 @@ export const TableUser: React.FC<props> = ({ dataresult, loading, loadings }): R
   const [number, setnumber] = useState<number>(0);
   const [menberNumber, setMember_number] = useState<string>("");
   const [getdataresult, setdataresult] = useState<IDetailnamecard>();
-
-  console.log(dataresult);
+  const [fileList, setFileList] = useState<UploadFile[]>([]);
 
   useEffect(() => {}, [getdataresult]);
 
@@ -56,8 +56,9 @@ export const TableUser: React.FC<props> = ({ dataresult, loading, loadings }): R
   };
 
   const handleCancelEdit = () => {
-    setIsModalOpenEdit(false);
     FORM.resetFields();
+    setFileList([]);
+    setIsModalOpenEdit(false);
   };
 
   function onChange(pagination: TablePaginationConfig) {
@@ -127,7 +128,7 @@ export const TableUser: React.FC<props> = ({ dataresult, loading, loadings }): R
         return (
           <>
             <div style={{ width: "100%", justifyContent: "center", display: "flex" }}>
-              <Row id={`qr-gen${event}`} style={{ width: "100px" }}>
+              <Row id={`qr-gen${event}`} style={{ width: "150px" }}>
                 <Col span={24} style={{ justifyContent: "center", display: "flex", marginTop: "5px" }}>
                   <QRCode
                     key={event}
@@ -135,10 +136,10 @@ export const TableUser: React.FC<props> = ({ dataresult, loading, loadings }): R
                     bgColor="#FFFFFF"
                     fgColor="#000000"
                     level="H"
-                    size={80}
+                    size={90}
                   />
                 </Col>
-                <Col span={24} style={{ textAlign: "center", justifyContent: "center", display: "flex", padding: "0px 20px 0px 20px" }}>
+                <Col span={24} style={{ textAlign: "center", padding: "0px 5px 0px 5px" }}>
                   <div style={{ marginTop: "5px", fontSize: "12px", marginBottom: "10px" }}>{`${row.name_th} ${row.lastname_th}`}</div>
                 </Col>
               </Row>
@@ -152,9 +153,7 @@ export const TableUser: React.FC<props> = ({ dataresult, loading, loadings }): R
                 }}
                 size="small"
               >
-                <Space>
-                  {`download`} <CloudDownloadOutlined style={{ height: "5px" }} />
-                </Space>
+                <CloudDownloadOutlined style={{ height: "5px" }} />
               </Button>
             </div>
           </>
@@ -166,7 +165,7 @@ export const TableUser: React.FC<props> = ({ dataresult, loading, loadings }): R
       dataIndex: "id",
       key: "id",
       fixed: "right",
-      width: "7%",
+      width: "8%",
       align: "center",
       render: (event: string, row: IDetailnamecard, index: number) => {
         return (
@@ -212,6 +211,8 @@ export const TableUser: React.FC<props> = ({ dataresult, loading, loadings }): R
           loadings={(e: boolean) => loadings(e)}
           getdataresult={getdataresult}
           FORM={FORM}
+          setFileList={(e: any) => setFileList(e)}
+          fileList={fileList}
         />
       </Modal>
       <Table

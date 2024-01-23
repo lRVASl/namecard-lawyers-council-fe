@@ -13,17 +13,17 @@ import ImgCrop from "antd-img-crop";
 export interface props {
   setIsModalOpen: (event: boolean) => void;
   loading: (event: boolean) => void;
-  handleCancel: () => void;
   FORM: any;
+  setFileList: (event: UploadFile[]) => void;
+  fileList: any;
 }
 
-export const CreateUser: React.FC<props> = ({ setIsModalOpen, loading, FORM, handleCancel }): React.ReactElement => {
+export const CreateUser: React.FC<props> = ({ setIsModalOpen, loading, FORM, setFileList, fileList }): React.ReactElement => {
   const namecardService = NamecardService(axiosInstance);
 
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState("");
   const [previewTitle, setPreviewTitle] = useState("");
-  const [fileList, setFileList] = useState<UploadFile[]>([]);
 
   const handlePreview = async (file: UploadFile) => {
     setPreviewImage(file.url || (file.preview as string) || (file.thumbUrl as string));
@@ -81,28 +81,26 @@ export const CreateUser: React.FC<props> = ({ setIsModalOpen, loading, FORM, han
         member_number: uuidNumber,
       },
     };
-
     const createusers = await namecardService.createUser(body as any);
-    if (createusers) {
-      if (fileList.length > 0) {
+    if (createusers.count === 1) {
+      if (fileList.length === 1) {
         const formData: any = new FormData();
         formData.append("images", fileList[0].originFileObj);
-        const images = await namecardService.uploadNewImages(uuidNumber, formData);
+        await namecardService.uploadNewImages(String(uuidNumber), formData);
       }
       message.success(`สร้างผู้ใช้งานใหม่สำเร็จ`);
       setIsModalOpen(false);
-      loading(true);
       FORM.resetFields();
-      handleCancel();
+      loading(true);
     }
   };
 
   const beforeUpload = (file: RcFile) => {
-    const isLt20M = file.size / 1024 / 1024 < 20;
-    if (!isLt20M) {
-      message.error("Image must smaller than 20MB!");
+    const isLt2M = file.size / 1024 / 1024 < 2;
+    if (!isLt2M) {
+      message.error("Image must smaller than 2MB!");
     }
-    return isLt20M;
+    return isLt2M;
   };
 
   return (
@@ -112,22 +110,6 @@ export const CreateUser: React.FC<props> = ({ setIsModalOpen, loading, FORM, han
       </Modal>
       <Form name="createuser" form={FORM} layout="vertical" onFinish={onfinish}>
         <Row gutter={[8, 8]}>
-          {/* <Col span={24} style={{ justifyContent: "center", display: "flex", textAlign: "center", alignItems: "center" }}>
-            <Form.Item label={`รูปภาพ :`}>
-              <ImgCrop rotationSlider>
-                <Upload
-                  action="https://run.mocky.io/v3/435e224c-44fb-4773-9faf-380c5e6a2188"
-                  listType="picture-circle"
-                  fileList={fileList}
-                  onPreview={handlePreview}
-                  onChange={handleChange}
-                  beforeUpload={beforeUpload}
-                >
-                  {fileList.length >= 1 ? null : uploadButton}
-                </Upload>
-              </ImgCrop>
-            </Form.Item>
-          </Col> */}
           <Col span={24}>
             <Form.Item label={`รูปภาพ :`}>
               <Row gutter={[8, 8]} style={{ justifyContent: "center", display: "flex" }}>

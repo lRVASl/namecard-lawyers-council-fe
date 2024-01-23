@@ -12,12 +12,13 @@ export interface props {
   loadings: (e: boolean) => void;
   getdataresult?: IDetailnamecard;
   FORM: any;
+  setFileList: (e: UploadFile[]) => void;
+  fileList: any;
 }
 
-export const EditUser: React.FC<props> = ({ setIsModalOpenEdit, loadings, getdataresult, FORM }) => {
+export const EditUser: React.FC<props> = ({ setIsModalOpenEdit, loadings, getdataresult, FORM, setFileList, fileList }) => {
   const namecardService = NamecardService(axiosInstance);
 
-  const [fileList, setFileList] = useState<UploadFile[]>([]);
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState("");
   const [previewTitle, setPreviewTitle] = useState("");
@@ -111,11 +112,11 @@ export const EditUser: React.FC<props> = ({ setIsModalOpenEdit, loadings, getdat
   };
 
   const beforeUpload = (file: RcFile) => {
-    const isLt20M = file.size / 1024 / 1024 < 20;
-    if (!isLt20M) {
-      message.error("Image must smaller than 20MB!");
+    const isLt2M = file.size / 1024 / 1024 < 2;
+    if (!isLt2M) {
+      message.error("Image must smaller than 2MB!");
     }
-    return isLt20M;
+    return isLt2M;
   };
   return (
     <div>

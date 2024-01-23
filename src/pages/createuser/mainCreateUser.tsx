@@ -5,6 +5,7 @@ import { CreateUser } from "./components/CreateUser";
 import { axiosInstance } from "../../configs/config";
 import { NamecardService } from "../services/e_name_card.service";
 import { IDetailnamecard } from "../common";
+import type { UploadFile } from "antd/es/upload/interface";
 
 export const MainCreateUser: React.FC<{}> = ({}): React.ReactElement => {
   const [FORM] = Form.useForm();
@@ -12,6 +13,7 @@ export const MainCreateUser: React.FC<{}> = ({}): React.ReactElement => {
   const [getData, setData] = useState<IDetailnamecard[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [fileList, setFileList] = useState<UploadFile[]>([]);
   useEffect(() => {
     fectdata();
   }, [loading]);
@@ -49,6 +51,7 @@ export const MainCreateUser: React.FC<{}> = ({}): React.ReactElement => {
   const handleCancel = () => {
     setIsModalOpen(false);
     FORM.resetFields();
+    setFileList([]);
   };
 
   return !loading ? (
@@ -58,7 +61,8 @@ export const MainCreateUser: React.FC<{}> = ({}): React.ReactElement => {
           setIsModalOpen={(e: boolean) => setIsModalOpen(e)}
           loading={(e: boolean) => setLoading(e)}
           FORM={FORM}
-          handleCancel={() => FORM.resetFields()}
+          setFileList={(e: any) => setFileList(e)}
+          fileList={fileList}
         />
       </Modal>
       <Card style={{ width: "100%", justifyContent: "start", display: "flex", alignItems: "end" }}>
