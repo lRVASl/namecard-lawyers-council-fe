@@ -86,7 +86,8 @@ export const TableUser: React.FC<props> = ({ dataresult, loading, loadings }): R
       title: "ลำดับ",
       dataIndex: "id",
       key: "id",
-      width: "5%",
+      width: "3%",
+      align: "center",
       render: (event: string, row: IDetailnamecard, index: number) => {
         let skip = (pagination.current - 1) * pagination.pageSize;
         return index + skip + 1;
@@ -96,12 +97,12 @@ export const TableUser: React.FC<props> = ({ dataresult, loading, loadings }): R
       title: "รูปภาพ",
       dataIndex: "id",
       key: "id",
-      width: "10%",
+      width: "8%",
       align: "center",
       render: (event: string, row: IDetailnamecard, index: number) => {
         return (
           <div style={{ justifyContent: "center", display: "flex" }}>
-            <Image src={row.imagefile ? URL.createObjectURL(row.imagefile) : ""} width={100} />
+            <Image src={row.imagefile ? URL.createObjectURL(row.imagefile) : ""} width={80} />
           </div>
         );
       },
@@ -121,7 +122,7 @@ export const TableUser: React.FC<props> = ({ dataresult, loading, loadings }): R
       key: "id",
       fixed: "right",
       align: "center",
-      width: "15%",
+      width: "8%",
       render: (event: string, row: IDetailnamecard, index: number) => {
         return (
           <>
@@ -165,7 +166,7 @@ export const TableUser: React.FC<props> = ({ dataresult, loading, loadings }): R
       dataIndex: "id",
       key: "id",
       fixed: "right",
-      width: "10%",
+      width: "7%",
       align: "center",
       render: (event: string, row: IDetailnamecard, index: number) => {
         return (

@@ -9,11 +9,9 @@ import { axiosInstance } from "../../configs/config";
 import { NamecardService } from "../services/e_name_card.service";
 // Icon
 import { Icon } from "@iconify/react";
-import { PhoneFilled, MailFilled } from "@ant-design/icons";
+import { PhoneFilled, MailFilled, UserOutlined } from "@ant-design/icons";
 import lineAppFill from "@iconify/icons-mingcute/line-app-fill";
 import locationIcon from "@iconify/icons-zondicons/location";
-import baselineMail from "@iconify/icons-ic/baseline-mail";
-import phoneBold from "@iconify/icons-solar/phone-bold";
 import facebookIcon from "@iconify/icons-fe/facebook";
 // logo and css
 import Logo from "./images/lawyer_card.png";
@@ -84,17 +82,21 @@ END:VCARD`;
         </Col>
         <Col span={24} style={{ justifyContent: "center", display: "flex", alignItems: "center" }}>
           <Card className="cardIncontent" bodyStyle={{ padding: "5px" }}>
-            <Avatar
-              className="avatar"
-              src={data?.imagefile.length !== 0 ? URL.createObjectURL(data?.imagefile) : ""}
-              style={{
-                backgroundPosition: "center",
-                backgroundRepeat: "no-repeat",
-                backgroundSize: "cover",
-                borderWidth: "2px",
-                backgroundColor: "lightgray",
-              }}
-            />
+            {data?.imagefile.length !== 0 ? (
+              <Avatar
+                className="avatar"
+                src={URL.createObjectURL(data?.imagefile)}
+                style={{
+                  backgroundPosition: "center",
+                  backgroundRepeat: "no-repeat",
+                  backgroundSize: "cover",
+                  borderWidth: "2px",
+                  backgroundColor: "lightgray",
+                }}
+              />
+            ) : (
+              <Avatar icon={<UserOutlined />} className="avatar" style={{ fontSize: "100px" }} />
+            )}
             <Typography className="typoHeader">{data?.name_th ? `${data?.name_th}  ${data?.lastname_th}` : "-"}</Typography>
             <Typography className="typoHeader-en">{data?.name_en ? `( ${data?.name_en}  ${data?.lastname_en} )` : "-"}</Typography>
             <Typography className="typoDetail">{data?.position ? `${data?.position}` : "-"}</Typography>

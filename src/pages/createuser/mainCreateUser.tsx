@@ -67,7 +67,7 @@ export const MainCreateUser: React.FC<{}> = ({}): React.ReactElement => {
       <Card style={{ width: "100%", marginTop: "10px" }}>
         <Row gutter={[8, 8]}>
           <Col span={24} style={{ justifyContent: "end", display: "flex" }}>
-            <Button type="primary" size="large" onClick={showModal}>{`สร้างผู้ใช้งานใหม่`}</Button>
+            <Button type="primary" onClick={showModal}>{`สร้างผู้ใช้งานใหม่`}</Button>
           </Col>
           <Col span={24}>
             <TableUser dataresult={getData} loading={loading} loadings={(e: boolean) => setLoading(e)} />
