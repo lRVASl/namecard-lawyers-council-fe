@@ -74,7 +74,7 @@ export const MainLayout: React.FC = () => {
                 backgroundColor: "white",
                 padding: 2,
                 textAlign: "right",
-                minHeight: "80px",
+                // minHeight: "30px",
                 height: "auto",
                 paddingRight: "20px",
               }}
@@ -84,7 +84,7 @@ export const MainLayout: React.FC = () => {
               style={{
                 padding: "24px",
                 margin: "0px 16px",
-                minHeight: "80vh",
+                minHeight: "86vh",
                 overflow: "initial",
               }}
             >
