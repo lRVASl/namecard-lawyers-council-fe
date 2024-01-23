@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { Button, Col, Modal, Row, Table, Typography, message, Image } from "antd";
+import { Button, Col, Modal, Row, Table, Typography, message, Image, Form, Space } from "antd";
 import { ColumnsType, TablePaginationConfig } from "antd/lib/table/interface";
 import { IDetailnamecard, TPagination } from "../../common";
 import { axiosInstance } from "../../../configs/config";
 import { NamecardService } from "../../services/e_name_card.service";
-import { RestOutlined, CloudDownloadOutlined } from "@ant-design/icons";
+import { CloudDownloadOutlined, DeleteOutlined } from "@ant-design/icons";
 import QRCode from "qrcode.react";
 import html2canvas from "html2canvas";
 import { EditUser } from "./EditUser";
@@ -18,6 +18,7 @@ export interface props {
 
 export const TableUser: React.FC<props> = ({ dataresult, loading, loadings }): React.ReactElement => {
   const namecardService = NamecardService(axiosInstance);
+  const [FORM] = Form.useForm();
   const [pagination, setPagination] = useState<TPagination>({
     current: 1,
     pageSize: 10,
@@ -56,6 +57,7 @@ export const TableUser: React.FC<props> = ({ dataresult, loading, loadings }): R
 
   const handleCancelEdit = () => {
     setIsModalOpenEdit(false);
+    FORM.resetFields();
   };
 
   function onChange(pagination: TablePaginationConfig) {
@@ -124,7 +126,7 @@ export const TableUser: React.FC<props> = ({ dataresult, loading, loadings }): R
         return (
           <>
             <div style={{ width: "100%", justifyContent: "center", display: "flex" }}>
-              <Row id={`qr-gen${event}`} style={{ width: "250px" }}>
+              <Row id={`qr-gen${event}`} style={{ width: "100px" }}>
                 <Col span={24} style={{ justifyContent: "center", display: "flex", marginTop: "5px" }}>
                   <QRCode
                     key={event}
@@ -132,7 +134,7 @@ export const TableUser: React.FC<props> = ({ dataresult, loading, loadings }): R
                     bgColor="#FFFFFF"
                     fgColor="#000000"
                     level="H"
-                    size={124}
+                    size={80}
                   />
                 </Col>
                 <Col span={24} style={{ textAlign: "center", justifyContent: "center", display: "flex", padding: "0px 20px 0px 20px" }}>
@@ -145,9 +147,13 @@ export const TableUser: React.FC<props> = ({ dataresult, loading, loadings }): R
                 onClick={() => downloadQRCodePNG(row)}
                 style={{
                   textAlign: "center",
+                  marginTop: "-5px",
                 }}
+                size="small"
               >
-                <CloudDownloadOutlined />
+                <Space>
+                  {`download`} <CloudDownloadOutlined style={{ height: "5px" }} />
+                </Space>
               </Button>
             </div>
           </>
@@ -184,9 +190,9 @@ export const TableUser: React.FC<props> = ({ dataresult, loading, loadings }): R
       <Modal open={isModalOpenDel} footer={false} onCancel={handleCancelDel} width={"300px"}>
         <Row gutter={[8, 8]} style={{ width: "100%", justifyContent: "center", display: "flex" }}>
           <Col span={24} style={{ width: "100%", justifyContent: "center", display: "flex" }}>
-            <RestOutlined style={{ fontSize: "72px", color: "red" }} />
+            <DeleteOutlined style={{ fontSize: "64px", color: "red" }} />
           </Col>
-          <Col span={24} style={{ width: "100%", justifyContent: "center", display: "flex" }}>
+          <Col span={24} style={{ width: "100%", justifyContent: "center", display: "flex", textAlign: "center" }}>
             <Typography>{`คุณต้องการยืนยันการลบข้อมูลผู้ใช้งานนี้ใช่หรือไม่ ?`}</Typography>
           </Col>
 
@@ -200,7 +206,12 @@ export const TableUser: React.FC<props> = ({ dataresult, loading, loadings }): R
       </Modal>
       {/* edit modal */}
       <Modal title={`แก้ไขข้อมูล`} open={isModalOpenEdit} footer={false} onCancel={handleCancelEdit}>
-        <EditUser setIsModalOpenEdit={(e: boolean) => setIsModalOpenEdit(e)} loadings={(e: boolean) => loadings(e)} getdataresult={getdataresult} />
+        <EditUser
+          setIsModalOpenEdit={(e: boolean) => setIsModalOpenEdit(e)}
+          loadings={(e: boolean) => loadings(e)}
+          getdataresult={getdataresult}
+          FORM={FORM}
+        />
       </Modal>
       <Table
         size="small"

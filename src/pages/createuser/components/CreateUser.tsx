@@ -13,11 +13,13 @@ import ImgCrop from "antd-img-crop";
 export interface props {
   setIsModalOpen: (event: boolean) => void;
   loading: (event: boolean) => void;
+  handleCancel: () => void;
+  FORM: any;
 }
 
-export const CreateUser: React.FC<props> = ({ setIsModalOpen, loading }): React.ReactElement => {
+export const CreateUser: React.FC<props> = ({ setIsModalOpen, loading, FORM, handleCancel }): React.ReactElement => {
   const namecardService = NamecardService(axiosInstance);
-  const [FORM] = Form.useForm();
+
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState("");
   const [previewTitle, setPreviewTitle] = useState("");
@@ -91,6 +93,7 @@ export const CreateUser: React.FC<props> = ({ setIsModalOpen, loading }): React.
       setIsModalOpen(false);
       loading(true);
       FORM.resetFields();
+      handleCancel();
     }
   };
 
@@ -109,19 +112,41 @@ export const CreateUser: React.FC<props> = ({ setIsModalOpen, loading }): React.
       </Modal>
       <Form name="createuser" form={FORM} layout="vertical" onFinish={onfinish}>
         <Row gutter={[8, 8]}>
-          <Col span={24} style={{ justifyContent: "center", display: "flex", textAlign: "center", alignItems: "center" }}>
-            <ImgCrop rotationSlider>
-              <Upload
-                action="https://run.mocky.io/v3/435e224c-44fb-4773-9faf-380c5e6a2188"
-                listType="picture-circle"
-                fileList={fileList}
-                onPreview={handlePreview}
-                onChange={handleChange}
-                beforeUpload={beforeUpload}
-              >
-                {fileList.length >= 1 ? null : uploadButton}
-              </Upload>
-            </ImgCrop>
+          {/* <Col span={24} style={{ justifyContent: "center", display: "flex", textAlign: "center", alignItems: "center" }}>
+            <Form.Item label={`รูปภาพ :`}>
+              <ImgCrop rotationSlider>
+                <Upload
+                  action="https://run.mocky.io/v3/435e224c-44fb-4773-9faf-380c5e6a2188"
+                  listType="picture-circle"
+                  fileList={fileList}
+                  onPreview={handlePreview}
+                  onChange={handleChange}
+                  beforeUpload={beforeUpload}
+                >
+                  {fileList.length >= 1 ? null : uploadButton}
+                </Upload>
+              </ImgCrop>
+            </Form.Item>
+          </Col> */}
+          <Col span={24}>
+            <Form.Item label={`รูปภาพ :`}>
+              <Row gutter={[8, 8]} style={{ justifyContent: "center", display: "flex" }}>
+                <Col>
+                  <ImgCrop rotationSlider>
+                    <Upload
+                      action="https://run.mocky.io/v3/435e224c-44fb-4773-9faf-380c5e6a2188"
+                      listType="picture-circle"
+                      fileList={fileList}
+                      onPreview={handlePreview}
+                      onChange={handleChange}
+                      beforeUpload={beforeUpload}
+                    >
+                      {fileList.length >= 1 ? null : uploadButton}
+                    </Upload>
+                  </ImgCrop>
+                </Col>
+              </Row>
+            </Form.Item>
           </Col>
           <Col span={12}>
             <Form.Item name={"name_th"} label={`ชื่อ (ไทย)`} rules={[{ required: true, message: "กรุณากรอกชื่อเป็นภาษาไทย" }]}>

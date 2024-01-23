@@ -60,10 +60,10 @@ export const MainMenu: React.FC<{}> = () => {
         }}
       >
         <Row>
-          <Col span={24} style={{ justifyContent: "center", display: "flex" }}>
+          <Col span={24} style={{ justifyContent: "center", display: "flex", marginTop: "-50px" }}>
             <Logo />
           </Col>
-          <Col span={24}>
+          <Col span={24} style={{ marginTop: "-40px" }}>
             <Menu
               mode="inline"
               selectedKeys={ks.slice(-1)}

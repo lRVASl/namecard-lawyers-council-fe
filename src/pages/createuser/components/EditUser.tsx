@@ -11,11 +11,12 @@ export interface props {
   setIsModalOpenEdit: (e: boolean) => void;
   loadings: (e: boolean) => void;
   getdataresult?: IDetailnamecard;
+  FORM: any;
 }
 
-export const EditUser: React.FC<props> = ({ setIsModalOpenEdit, loadings, getdataresult }) => {
+export const EditUser: React.FC<props> = ({ setIsModalOpenEdit, loadings, getdataresult, FORM }) => {
   const namecardService = NamecardService(axiosInstance);
-  const [FORM] = Form.useForm();
+
   const [fileList, setFileList] = useState<UploadFile[]>([]);
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState("");

@@ -113,7 +113,7 @@ END:VCARD`;
               </Space>
               <Space className="iconContact">
                 <Icon icon={lineAppFill} style={{ color: "#2D43A6" }} />
-                <Typography className="typodetail-contact">{data?.line === null ? "-" : `${data?.line}`}</Typography>
+                <Typography className="typodetail-contact">{data?.line === null || data?.line === "" ? "-" : `${data?.line}`}</Typography>
               </Space>
             </div>
             <Card
@@ -135,7 +135,7 @@ F : +662 522 7138`}</Typography>
             <div style={{ justifyContent: "space-around", display: "flex" }}>
               <div>
                 <Button type="link" onClick={() => handleCall()} className="divIcon">
-                  <Icon icon={phoneBold} className="icon" />
+                  <PhoneFilled className="icon" rotate={90} />
                 </Button>
               </div>
               <div>
@@ -145,7 +145,7 @@ F : +662 522 7138`}</Typography>
               </div>
               <div>
                 <Button type="link" className="divIcon" onClick={() => handleSavemail()}>
-                  <Icon icon={baselineMail} className="icon" />
+                  <MailFilled className="icon" />
                 </Button>
               </div>
               <div>

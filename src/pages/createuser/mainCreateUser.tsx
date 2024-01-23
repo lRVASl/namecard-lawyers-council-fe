@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Button, Card, Col, Modal, Row, Spin, Typography } from "antd";
+import { Button, Card, Col, Form, Modal, Row, Spin, Typography } from "antd";
 import { TableUser } from "./components/TableUser";
 import { CreateUser } from "./components/CreateUser";
 import { axiosInstance } from "../../configs/config";
@@ -7,6 +7,7 @@ import { NamecardService } from "../services/e_name_card.service";
 import { IDetailnamecard } from "../common";
 
 export const MainCreateUser: React.FC<{}> = ({}): React.ReactElement => {
+  const [FORM] = Form.useForm();
   const namecardService = NamecardService(axiosInstance);
   const [getData, setData] = useState<IDetailnamecard[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
@@ -32,10 +33,10 @@ export const MainCreateUser: React.FC<{}> = ({}): React.ReactElement => {
     }
     setLoading(false);
   };
-  
   const dataImages = async (e: any) => {
-    if (e.images_namecard.length >= 1) {
-      const getImages = await namecardService.getImages(e.images_namecard[0]?.idfile);
+    if (e.images_namecard.length != 0) {
+      const getImages = await namecardService.getImages(e.images_namecard[0].idfile);
+      console.log(getImages);
       return getImages;
     } else {
       return null;
@@ -47,20 +48,26 @@ export const MainCreateUser: React.FC<{}> = ({}): React.ReactElement => {
   };
   const handleCancel = () => {
     setIsModalOpen(false);
+    FORM.resetFields();
   };
 
   return !loading ? (
     <div>
       <Modal title="สร้างผู้ใช้งานใหม่" open={isModalOpen} onCancel={handleCancel} footer={false} width={1000}>
-        <CreateUser setIsModalOpen={(e: boolean) => setIsModalOpen(e)} loading={(e: boolean) => setLoading(e)} />
+        <CreateUser
+          setIsModalOpen={(e: boolean) => setIsModalOpen(e)}
+          loading={(e: boolean) => setLoading(e)}
+          FORM={FORM}
+          handleCancel={() => FORM.resetFields()}
+        />
       </Modal>
       <Card style={{ width: "100%", justifyContent: "start", display: "flex", alignItems: "end" }}>
-        <Typography style={{ fontSize: "32px", fontWeight: "bold" }}>{`สร้างผู้ใช้งาน`}</Typography>
+        <Typography style={{ fontSize: "24px", fontWeight: "bold" }}>{`สร้างผู้ใช้งาน`}</Typography>
       </Card>
       <Card style={{ width: "100%", marginTop: "10px" }}>
         <Row gutter={[8, 8]}>
           <Col span={24} style={{ justifyContent: "end", display: "flex" }}>
-            <Button type="primary" onClick={showModal}>{`สร้างผู้ใช้งานใหม่`}</Button>
+            <Button type="primary" size="large" onClick={showModal}>{`สร้างผู้ใช้งานใหม่`}</Button>
           </Col>
           <Col span={24}>
             <TableUser dataresult={getData} loading={loading} loadings={(e: boolean) => setLoading(e)} />
