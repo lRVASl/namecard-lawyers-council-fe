@@ -30,6 +30,7 @@
   height: 150px;
   margin-bottom: 15px;
   object-fit: cover;
+  align-items: center;
 }
 
 .typoHeader {

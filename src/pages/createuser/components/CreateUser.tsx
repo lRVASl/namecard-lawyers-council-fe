@@ -36,6 +36,7 @@ export const CreateUser: React.FC<props> = ({ setIsModalOpen, loading, FORM, set
 
   const handleCancelmodal = () => {
     setIsModalOpen(false);
+    setFileList([]);
     FORM.resetFields();
   };
 
@@ -89,8 +90,9 @@ export const CreateUser: React.FC<props> = ({ setIsModalOpen, loading, FORM, set
         await namecardService.uploadNewImages(String(uuidNumber), formData);
       }
       message.success(`สร้างผู้ใช้งานใหม่สำเร็จ`);
-      setIsModalOpen(false);
       FORM.resetFields();
+      setFileList([]);
+      setIsModalOpen(false);
       loading(true);
     }
   };
@@ -100,7 +102,7 @@ export const CreateUser: React.FC<props> = ({ setIsModalOpen, loading, FORM, set
     if (!isLt2M) {
       message.error("Image must smaller than 2MB!");
     }
-    return isLt2M;
+    return isLt2M || Upload.LIST_IGNORE;
   };
 
   return (
@@ -117,7 +119,7 @@ export const CreateUser: React.FC<props> = ({ setIsModalOpen, loading, FORM, set
                   <ImgCrop rotationSlider>
                     <Upload
                       action="https://run.mocky.io/v3/435e224c-44fb-4773-9faf-380c5e6a2188"
-                      listType="picture-circle"
+                      listType="picture-card"
                       fileList={fileList}
                       onPreview={handlePreview}
                       onChange={handleChange}
@@ -213,7 +215,7 @@ export const CreateUser: React.FC<props> = ({ setIsModalOpen, loading, FORM, set
               <Input placeholder="ข้อความ" />
             </Form.Item>
           </Col>
-          <Col span={24} style={{ justifyContent: "center", display: "flex" }}>
+          <Col span={24} style={{ justifyContent: "center", display: "flex", marginBottom: "-30px" }}>
             <Space>
               <Form.Item>
                 <Button type="primary" danger onClick={() => handleCancelmodal()}>{`ยกเลิก`}</Button>

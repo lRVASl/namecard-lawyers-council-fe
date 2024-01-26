@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Button, Col, Modal, Row, Table, Typography, message, Image, Form, Space } from "antd";
+import { Button, Col, Modal, Row, Table, Typography, message, Image, Form, Avatar, Space } from "antd";
 import { ColumnsType, TablePaginationConfig } from "antd/lib/table/interface";
 import { IDetailnamecard, TPagination } from "../../common";
 import { axiosInstance } from "../../../configs/config";
@@ -8,8 +8,10 @@ import { CloudDownloadOutlined, DeleteOutlined } from "@ant-design/icons";
 import QRCode from "qrcode.react";
 import html2canvas from "html2canvas";
 import { EditUser } from "./EditUser";
-import { async } from "q";
 import { UploadFile } from "antd/lib/upload/interface";
+import { UserOutlined } from "@ant-design/icons";
+import { Icon } from "@iconify/react";
+import trashOutline from "@iconify/icons-ion/trash-outline";
 
 export interface props {
   dataresult: IDetailnamecard[];
@@ -41,7 +43,7 @@ export const TableUser: React.FC<props> = ({ dataresult, loading, loadings }): R
   const handleOkDel = async () => {
     const deleteusers = await namecardService.deleteUser(number, menberNumber);
     if (deleteusers) {
-      message.success(`ลบสำเร็จ`);
+      message.success(`ลบผู้ใช้งานสำเร็จ`);
       setIsModalOpenDel(false);
       loadings(true);
     }
@@ -103,15 +105,51 @@ export const TableUser: React.FC<props> = ({ dataresult, loading, loadings }): R
       render: (event: string, row: IDetailnamecard, index: number) => {
         return (
           <div style={{ justifyContent: "center", display: "flex" }}>
-            <Image src={row.imagefile ? URL.createObjectURL(row.imagefile) : ""} width={80} />
+            {row.imagefile ? (
+              <Image src={URL.createObjectURL(row.imagefile)} width={80} style={{ borderRadius: "6px" }} />
+            ) : (
+              <Avatar
+                shape="square"
+                icon={<UserOutlined />}
+                style={{ width: "80px", height: "80px", alignItems: "center", justifyContent: "center", display: "flex", fontSize: "60px" }}
+              />
+            )}
           </div>
         );
       },
     },
-    { title: "ชื่อ (ไทย)", dataIndex: "name_th", key: "name_th" },
-    { title: "นามสกุล (ไทย)", dataIndex: "lastname_th", key: "lastname_th" },
-    { title: "ชื่อ (อังกฤษ)", dataIndex: "name_en", key: "name_en" },
-    { title: "นามสกุล (อังกฤษ)", dataIndex: "lastname_en", key: "lastname_en" },
+    {
+      title: "ชื่อ - นามสกุล (ไทย)",
+      dataIndex: "name_th",
+      key: "name_th",
+      render: (value: string, row: IDetailnamecard, index: number) => {
+        return (
+          <>
+            <Space>
+              <Typography>{row.name_th}</Typography>
+              <Typography>{row.lastname_th}</Typography>
+            </Space>
+          </>
+        );
+      },
+    },
+    // { title: "นามสกุล (ไทย)", dataIndex: "lastname_th", key: "lastname_th" },
+    // { title: "ชื่อ (อังกฤษ)", dataIndex: "name_en", key: "name_en" },
+    {
+      title: "ชื่อ - นามสกุล (อังกฤษ)",
+      dataIndex: "lastname_en",
+      key: "lastname_en",
+      render: (value: string, row: IDetailnamecard, index: number) => {
+        return (
+          <>
+            <Space>
+              <Typography>{row.name_en}</Typography>
+              <Typography>{row.lastname_en}</Typography>
+            </Space>
+          </>
+        );
+      },
+    },
     { title: "ตำแหน่ง", dataIndex: "position", key: "position" },
     { title: "เบอร์โทรศัพท์", dataIndex: "phone_number", key: "phone_number" },
     { title: "อีเมล", dataIndex: "email", key: "email" },
@@ -136,7 +174,7 @@ export const TableUser: React.FC<props> = ({ dataresult, loading, loadings }): R
                     bgColor="#FFFFFF"
                     fgColor="#000000"
                     level="H"
-                    size={90}
+                    size={80}
                   />
                 </Col>
                 <Col span={24} style={{ textAlign: "center", padding: "0px 5px 0px 5px" }}>
@@ -190,7 +228,7 @@ export const TableUser: React.FC<props> = ({ dataresult, loading, loadings }): R
       <Modal open={isModalOpenDel} footer={false} onCancel={handleCancelDel} width={"300px"}>
         <Row gutter={[8, 8]} style={{ width: "100%", justifyContent: "center", display: "flex" }}>
           <Col span={24} style={{ width: "100%", justifyContent: "center", display: "flex" }}>
-            <DeleteOutlined style={{ fontSize: "64px", color: "red" }} />
+            <Icon icon={trashOutline} style={{ fontSize: "64px", color: "red" }} />
           </Col>
           <Col span={24} style={{ width: "100%", justifyContent: "center", display: "flex", textAlign: "center" }}>
             <Typography>{`คุณต้องการยืนยันการลบข้อมูลผู้ใช้งานนี้ใช่หรือไม่ ?`}</Typography>
@@ -205,7 +243,12 @@ export const TableUser: React.FC<props> = ({ dataresult, loading, loadings }): R
         </Row>
       </Modal>
       {/* edit modal */}
-      <Modal title={`แก้ไขข้อมูล`} open={isModalOpenEdit} footer={false} onCancel={handleCancelEdit}>
+      <Modal
+        title={<div style={{ justifyContent: "center", display: "flex", marginBottom: "25px" }}>{`แก้ไขข้อมูลผู้ใช้งาน`}</div>}
+        open={isModalOpenEdit}
+        footer={false}
+        onCancel={handleCancelEdit}
+      >
         <EditUser
           setIsModalOpenEdit={(e: boolean) => setIsModalOpenEdit(e)}
           loadings={(e: boolean) => loadings(e)}

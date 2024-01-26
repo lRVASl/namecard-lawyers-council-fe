@@ -116,7 +116,7 @@ export const EditUser: React.FC<props> = ({ setIsModalOpenEdit, loadings, getdat
     if (!isLt2M) {
       message.error("Image must smaller than 2MB!");
     }
-    return isLt2M;
+    return isLt2M || Upload.LIST_IGNORE;
   };
   return (
     <div>
@@ -127,20 +127,24 @@ export const EditUser: React.FC<props> = ({ setIsModalOpenEdit, loadings, getdat
         <Row gutter={[8, 8]}>
           <Col span={24}>
             <Form.Item label={`รูปภาพ :`}>
-              <Row gutter={[8, 8]} style={{ justifyContent: "center", display: "flex" }}>
+              <Row gutter={[8, 8]} style={{ justifyContent: "center", display: "flex", alignItems: "center" }}>
                 <Space>
                   {getdataresult?.imagefile === null ? (
                     <></>
                   ) : fileList.length >= 1 ? null : (
-                    <Col>
-                      <Image src={getdataresult?.imagefile ? URL.createObjectURL(getdataresult?.imagefile) : ""} width={100} />
+                    <Col style={{ justifyContent: "center", display: "flex", alignItems: "center", marginTop: "-10px" }}>
+                      <Image
+                        style={{ borderRadius: "6px" }}
+                        src={getdataresult?.imagefile ? URL.createObjectURL(getdataresult?.imagefile) : ""}
+                        width={100}
+                      />
                     </Col>
                   )}
-                  <Col>
+                  <Col style={{ justifyContent: "center", display: "flex", alignItems: "center" }}>
                     <ImgCrop rotationSlider>
                       <Upload
                         action="https://run.mocky.io/v3/435e224c-44fb-4773-9faf-380c5e6a2188"
-                        listType="picture-circle"
+                        listType="picture-card"
                         fileList={fileList}
                         onPreview={handlePreview}
                         onChange={handleChangePic}
@@ -238,7 +242,7 @@ export const EditUser: React.FC<props> = ({ setIsModalOpenEdit, loadings, getdat
               <Input placeholder="ข้อความ" />
             </Form.Item>
           </Col>
-          <Col span={24} style={{ justifyContent: "center", display: "flex" }}>
+          <Col span={24} style={{ justifyContent: "center", display: "flex", marginBottom: "-30px" }}>
             <Space>
               <Form.Item>
                 <Button type="primary" danger onClick={() => handleCancel()}>{`ยกเลิก`}</Button>

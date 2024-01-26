@@ -56,7 +56,12 @@ export const MainCreateUser: React.FC<{}> = ({}): React.ReactElement => {
 
   return !loading ? (
     <div>
-      <Modal title="สร้างผู้ใช้งานใหม่" open={isModalOpen} onCancel={handleCancel} footer={false} width={1000}>
+      <Modal
+        title={<div style={{ justifyContent: "center", display: "flex ", marginBottom: "20px" }}>{"สร้างผู้ใช้งานใหม่"}</div>}
+        open={isModalOpen}
+        onCancel={handleCancel}
+        footer={false}
+      >
         <CreateUser
           setIsModalOpen={(e: boolean) => setIsModalOpen(e)}
           loading={(e: boolean) => setLoading(e)}
@@ -66,7 +71,7 @@ export const MainCreateUser: React.FC<{}> = ({}): React.ReactElement => {
         />
       </Modal>
       <Card style={{ width: "100%", justifyContent: "start", display: "flex", alignItems: "end" }}>
-        <Typography style={{ fontSize: "24px", fontWeight: "bold" }}>{`สร้างผู้ใช้งาน`}</Typography>
+        <Typography style={{ fontSize: "24px", fontWeight: "bold" }}>{`ผู้ใช้งาน`}</Typography>
       </Card>
       <Card style={{ width: "100%", marginTop: "10px" }}>
         <Row gutter={[8, 8]}>
